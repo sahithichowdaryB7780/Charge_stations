@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\database"
+    "\\database",
+    "\\test"
   ],
-  "SelectedNode": "\\package.json",
+  "SelectedNode": "\\server.js",
   "PreviewInSolutionExplorer": false
 }
