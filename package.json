@@ -1,10 +1,10 @@
 {
-  "name": "",
+  "name": "charge_stations",
   "version": "1.0.0",
   "description": "---fill-this---",
   "main": "index.js",
   "scripts": {
-    "test": "env AZURE_NODE_ENV=development env NODE_ENV=development npx mocha --exit"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +24,14 @@
     "jscpd": "^3.5.4",
     "mocha": "^10.2.0",
     "nyc": "^15.1.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongodb-memory-server": "^9.1.6",
+    "mongoose": "^8.2.0",
+    "nodemon": "^3.1.0"
   }
 }
