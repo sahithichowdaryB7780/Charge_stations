@@ -30,14 +30,17 @@ app.post('/connectorsPost', async (req, res, next) => {
 });
 
 app.get('/connectorsGet/:connectorType', async (req, res, next) => {
-    try {
-        const connectorType = req.params.connectorType;
-        const connectors = await EVConnectors.find({connectorType}); // Find connectors by connectorType
+    const connectorType = req.params.connectorType;
+    const connectors = await EVConnectors.find({connectorType});
+
+    if (connectors.length === 0) {
+        // Respond with status 404 if no connectors are found for the specified type
+         res.status(404).json({message: 'No connectors found for the specified type'});
+    } else {
+        // Respond with status 200 and the found connectors
         res.status(200).json(connectors);
-    } catch (error) {
-        res.status(400).json({connectorsTypeNotFound: error.message}); // Pass the error to the error handling middleware
     }
-});
+    });
 
 
 async function connect() {
