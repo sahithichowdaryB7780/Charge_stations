@@ -6,10 +6,10 @@ const app = express();
 app.use(express.json());
 
 // Define a middleware function for error handling
-app.use((err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Internal Server Error' });
-});
+};
 
 // Use the error handling middleware
 app.use(errorHandler);
@@ -33,7 +33,6 @@ app.post('/connectorsPost', async (req, res, next) => {
     next(error); // Pass the error to the error handling middleware
   }
 });
-
 
 async function connect() {
   const mongoServer = await MongoMemoryServer.create();
