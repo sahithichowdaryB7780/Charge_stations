@@ -16,7 +16,6 @@ app.post('/chargeStationsPost', async (req, res) => {
 });
 
 async function connect() {
-  try {
     const mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
 
@@ -25,10 +24,7 @@ async function connect() {
       useUnifiedTopology: true,
     });
     console.log('db connected successfully');
-  } catch (error) {
-    console.log('Invalid Database Connection:', error);
   }
-}
 
 
 // Call connect function to start the server and establish database connection
