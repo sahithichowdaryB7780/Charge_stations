@@ -1,29 +1,21 @@
-const {EVChargeStation, EVConnectors} = require('./database/data.js');
+/* eslint-disable indent */
+const {EVChargeStation} = require('./database/data.js');
+const {EVConnectors} = require('./database/data.js');
 const express = require('express');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose'); // Import mongoose module
 const app = express();
 app.use(express.json());
 
-const errorHandler = (err, req, res, next) => {
-  console.error(err.stack);
-  const statusCode = err.status || 500; // Use the provided status code or default to 500
-  const message = err.message || 'Internal Server Error'; // Use the provided message or default message
-  res.status(statusCode).json({ message }); // Send error response with status code and message
-};
-
-// Use the error handling middleware
-app.use(errorHandler);
 
 // Route handler for creating charge stations
 app.post('/chargeStationsPost', async (req, res, next) => {
-  try {
-    const chargeStationProduct = await EVChargeStation.create(req.body);
-    console.log("connector created");
-    res.status(200).json(chargeStationProduct);
-  } catch (error) {
-    next({ status: 500, message: error.message || 'Internal Server Error in Posting to chargestation' }); // Pass the error to the error handling middleware
-  }
+    try {
+        const chargeStationProduct = await EVChargeStation.create(req.body);
+        res.status(200).json(chargeStationProduct);
+    } catch (error) {
+        res.status(500).json({Stationmessage: error.message});
+    }
 });
 
 // Route handler for creating connectors
@@ -32,7 +24,7 @@ app.post('/connectorsPost', async (req, res, next) => {
     const connectorProduct = await EVConnectors.create(req.body);
     res.status(200).json(connectorProduct);
   } catch (error) {
-    next({ status: 500, message: error.message || 'Internal Server Error in posting to connector' }); // Pass the error to the error handling middleware
+      res.status(500).json({Connectormessage: error.message}); // Pass the error to the error handling middleware
   }
 });
 

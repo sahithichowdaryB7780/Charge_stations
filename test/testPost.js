@@ -45,17 +45,20 @@ describe('CRUD operations', () => {
 
   // ----------------------------------------------------------//
 
-  it('should return 500 when an error occurs', async () => {
+  it('should return 500 and an error message when an error occurs', async () => {
     const stationData = {
       // Missing required fields, which should cause a validation error
       // This will trigger the catch block
     };
 
-    await request(app)
+    const response = await request(app)
         .post('/chargeStationsPost')
         .send(stationData)
         .expect(500);
+
+    expect(response.body).to.be.an('object').and.to.have.property('Stationmessage');
   });
+
 
   // ----------------------------------------------------------//
 
@@ -71,7 +74,7 @@ describe('CRUD operations', () => {
     // Send POST request to create a charge station
     const responseStation = await request(app)
         .post('/chargeStationsPost')
-        .send(stationData)
+        .send(stationData);
 
     const _idofinsertedstation = responseStation.body._id;
 
@@ -80,11 +83,11 @@ describe('CRUD operations', () => {
       connectorType: 'Type A',
       wattage: 240,
       manufacturer: 'Manufacturer X',
-      chargePoint: {
+      chargePoint: [{
         chargePointName: 'Point A',
         isOnline: true,
         chargeStation: [_idofinsertedstation],
-      },
+      }],
     };
 
     const response = await request(app)
@@ -92,14 +95,19 @@ describe('CRUD operations', () => {
         .send(connector)
         .expect(200);
 
-    expect(response.body.connector).to.have.property('connector_id').equal(connector.connector_id);
-    expect(response.body.connector).to.have.property('connectorType').equal(connector.connectorType);
-    expect(response.body.connector).to.have.property('wattage').equal(connector.wattage);
-    expect(response.body.connector).to.have.property('manufacturer').equal(connector.manufacturer);
-    expect(response.body.connector.chargePoint).to.be.an('array');
-    expect(response.body.connector.chargePoint[0]).to.have.property('chargePointName').equal(connector.chargePoint[0].chargePointName);
-    expect(response.body.connector.chargePoint[0]).to.have.property('isOnline').equal(connector.chargePoint[0].isOnline);
-    expect(response.body.connector.chargePoint[0]).to.have.property('chargeStation').equal(connector.chargePoint[0].chargeStation);
+    expect(response.body).to.have.property('_id'); // Assuming your connector model returns an _id field upon insertion
+    expect(response.body).to.have.property('connector_id', connector.connector_id);
+    expect(response.body).to.have.property('connectorType', connector.connectorType);
+    expect(response.body).to.have.property('wattage', connector.wattage);
+    expect(response.body).to.have.property('manufacturer', connector.manufacturer);
+    expect(response.body.chargePoint).to.be.an('array');
+    expect(response.body.chargePoint).to.have.lengthOf(1);
+    expect(response.body.chargePoint[0]).to.have.property('chargePointName', connector.chargePoint[0].chargePointName);
+    expect(response.body.chargePoint[0]).to.have.property('isOnline', connector.chargePoint[0].isOnline);
+    expect(response.body.chargePoint[0]).to.have.property('chargeStation');
+    // Assuming _idofinsertedstation is the ID of the inserted station, you might want to dynamically check if it exists
+    // You may also need to modify this check depending on how you handle the station ID
+    expect(response.body.chargePoint[0].chargeStation[0]).to.equal(_idofinsertedstation);
   });
   // ----------------------------------------------------------//
   it('should return 500 when an error occurs in posting to connector', async () => {
@@ -108,12 +116,11 @@ describe('CRUD operations', () => {
       // This will trigger the catch block
     };
 
- await request(app)
+    const response = await request(app)
         .post('/connectorsPost')
         .send(connector)
         .expect(500);
-
+    expect(response.body).to.be.an('object').and.to.have.property('Connectormessage');
     // Check if the response contains the error message
   });
 });
-

@@ -56,10 +56,10 @@ const connectorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  chargePoint: chargePointSchema,
+  chargePoint: [chargePointSchema],
 });
 
-const EVConnector = mongoose.model('EVConnector', connectorSchema);
+const EVConnectors = mongoose.model('EVConnector', connectorSchema);
 const EVChargeStation = mongoose.model('EVChargeStation', evChargeStationSchema);
 
-module.exports = {EVConnector, EVChargeStation};
+module.exports = {EVConnectors, EVChargeStation};
