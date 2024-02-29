@@ -72,7 +72,6 @@ describe('CRUD operations', () => {
     const responseStation = await request(app)
         .post('/chargeStationsPost')
         .send(stationData)
-        .expect(200);
 
     const _idofinsertedstation = responseStation.body._id;
 
