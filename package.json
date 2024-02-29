@@ -4,7 +4,8 @@
   "description": "---fill-this---",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "test": "env AZURE_NODE_ENV=development env NODE_ENV=development npx mocha --exit",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",

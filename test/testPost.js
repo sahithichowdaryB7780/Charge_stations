@@ -41,4 +41,21 @@ describe('POST /chargeStationsPost', () => {
     expect(response.body.longitude).to.equal(stationData.longitude);
     expect(response.body.amenities).to.deep.equal(stationData.amenities);
   });
+  it('should return 500 when an error occurs', async () => {
+    // Drop the collection to force an error
+    await EVChargeStation.deleteMany({});
+
+    const stationData = {
+      // Missing required fields, which should cause a validation error
+      // This will trigger the catch block
+    };
+
+    const response = await request(app)
+        .post('/chargeStationsPost')
+        .send(stationData)
+        .expect(500);
+
+    // Check if the response contains the error message
+    expect(response.body).to.have.property('message').that.includes('validation failed');
+  });
 });
