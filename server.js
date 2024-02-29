@@ -21,7 +21,7 @@ app.post('/chargeStationsPost', async (req, res, next) => {
     const chargeStationProduct = await EVChargeStation.create(req.body);
     res.status(200).json(chargeStationProduct);
   } catch (error) {
-    next({ status: 500, message: error.message || 'Internal Server Error' }); // Pass the error to the error handling middleware
+    next({ status: 500, message: error.message || 'Internal Server Error in Posting to chargestation' }); // Pass the error to the error handling middleware
   }
 });
 
@@ -31,7 +31,7 @@ app.post('/connectorsPost', async (req, res, next) => {
     const connectorProduct = await EVConnectors.create(req.body);
     res.status(200).json(connectorProduct);
   } catch (error) {
-    next({ status: 500, message: error.message || 'Internal Server Error' }); // Pass the error to the error handling middleware
+    next({ status: 500, message: error.message || 'Internal Server Error in posting to connector' }); // Pass the error to the error handling middleware
   }
 });
 
