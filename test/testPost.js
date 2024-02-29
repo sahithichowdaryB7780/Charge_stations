@@ -180,7 +180,7 @@ describe('CRUD operations', () => {
   // ----------------------------------------------------------//
   it('should return status 400 as the given type is not found', async () => {
     // Mock an error by setting an invalid connectorType that doesn't exist in the database
-    const nonExistentType = '';
+    const nonExistentType = 'Type-D';
     // Make request to retrieve connectors with invalid connectorType
     const response = await request(app)
         .get(`/connectorsGet/${nonExistentType}`)
