@@ -80,11 +80,11 @@ describe('CRUD operations', () => {
       connectorType: 'Type A',
       wattage: 240,
       manufacturer: 'Manufacturer X',
-      chargePoint: [{
+      chargePoint: {
         chargePointName: 'Point A',
         isOnline: true,
-        chargeStation: _idofinsertedstation,
-      }],
+        chargeStation: [_idofinsertedstation],
+      },
     };
 
     const response = await request(app)
