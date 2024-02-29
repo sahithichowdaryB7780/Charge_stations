@@ -57,7 +57,7 @@ describe('CRUD operations', () => {
         .expect(500);
 
     // Check if the response contains the error message
-    expect(response.body).to.have.property('message').that.includes('Internal Server Error in posting chargestation');
+    expect(response.body).to.have.property('message').that.includes('Internal Server Error in Posting chargestation');
   });
 
   // ----------------------------------------------------------//
