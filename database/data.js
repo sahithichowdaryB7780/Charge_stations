@@ -20,7 +20,7 @@ const evChargeStationSchema = new mongoose.Schema({
   },
   amenities: [String],
 });
-/*
+
 // Records Charge point details, refers to charge stations
 const chargePointSchema = new mongoose.Schema({
   chargePointName: {
@@ -59,7 +59,7 @@ const connectorSchema = new mongoose.Schema({
   chargePoint: [chargePointSchema],
 });
 
-const EVConnector = mongoose.model('EVConnector', connectorSchema);*/
-// module.exports = {EVConnector, EVChargeStation};
+const EVConnector = mongoose.model('EVConnector', connectorSchema);
 const EVChargeStation = mongoose.model('EVChargeStation', evChargeStationSchema);
-module.exports = {EVChargeStation};
+
+module.exports = {EVConnector, EVChargeStation};
