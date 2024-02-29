@@ -178,14 +178,13 @@ describe('CRUD operations', () => {
   });
 
   // ----------------------------------------------------------//
-  it('should return status 500 and an error message if an error occurs', async () => {
+  it('should return status 400 as the given type is not found', async () => {
     // Mock an error by setting an invalid connectorType that doesn't exist in the database
-    const invalidConnectorType = '';
-
+    const nonExistentType = '';
     // Make request to retrieve connectors with invalid connectorType
     const response = await request(app)
-        .get(`/connectorsGet/${invalidConnectorType}`)
-        .expect(500);
+        .get(`/connectorsGet/${nonExistentType}`)
+        .expect(400);
 
     // Assert the response body contains an error message
     expect(response.body).to.be.an('object');
