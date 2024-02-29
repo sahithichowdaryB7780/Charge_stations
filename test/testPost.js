@@ -83,7 +83,7 @@ describe('CRUD operations', () => {
       chargePoint: [{
         chargePointName: 'Point A',
         isOnline: true,
-        chargeStation: [_idofinsertedstation],
+        chargeStation: _idofinsertedstation,
       }],
     };
 
