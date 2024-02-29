@@ -5,10 +5,11 @@ const mongoose = require('mongoose'); // Import mongoose module
 const app = express();
 app.use(express.json());
 
-// Define a middleware function for error handling
 const errorHandler = (err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Internal Server Error' });
+  const statusCode = err.status || 500; // Use the provided status code or default to 500
+  const message = err.message || 'Internal Server Error'; // Use the provided message or default message
+  res.status(statusCode).json({ message }); // Send error response with status code and message
 };
 
 // Use the error handling middleware
@@ -20,7 +21,7 @@ app.post('/chargeStationsPost', async (req, res, next) => {
     const chargeStationProduct = await EVChargeStation.create(req.body);
     res.status(200).json(chargeStationProduct);
   } catch (error) {
-    next(error); // Pass the error to the error handling middleware
+    next({ status: 500, message: error.message || 'Internal Server Error' }); // Pass the error to the error handling middleware
   }
 });
 
@@ -30,7 +31,7 @@ app.post('/connectorsPost', async (req, res, next) => {
     const connectorProduct = await EVConnectors.create(req.body);
     res.status(200).json(connectorProduct);
   } catch (error) {
-    next(error); // Pass the error to the error handling middleware
+    next({ status: 500, message: error.message || 'Internal Server Error' }); // Pass the error to the error handling middleware
   }
 });
 
