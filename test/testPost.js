@@ -3,7 +3,7 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const request = require('supertest');
 const {app, connect} = require('../server.js');
-
+const {EVConnectors} = require('../database/data.js');
 
 describe('CRUD operations', () => {
   let mongoServer;
@@ -122,5 +122,73 @@ describe('CRUD operations', () => {
         .expect(500);
     expect(response.body).to.be.an('object').and.to.have.property('Connectormessage');
     // Check if the response contains the error message
+  });
+  // ----------------------------------------------------------//
+  it('should return connectors of the specified type and status 200 if successful', async () => {
+    // Insert mock data into the in-memory database
+    const stationDataInGet = {
+      chargeStationName: 'AdEV',
+      address: '1st cross, ISRO Layout, Bangalore',
+      latitude: 53.34,
+      longitude: 5.78,
+      amenities: ['toilet'],
+    };
+
+    // Send POST request to create a charge station
+    const responseStationInGet = await request(app)
+        .post('/chargeStationsPost')
+        .send(stationDataInGet);
+
+    const _idofinsertedstationinget = responseStationInGet.body._id;
+
+    await EVConnectors.create([
+      {
+        connector_id: 1,
+        connectorType: 'Type A',
+        wattage: 240,
+        manufacturer: 'Manufacturer X',
+        chargePoint: {
+          chargePointName: 'Hp1',
+          isOnline: true,
+          chargeStation: _idofinsertedstationinget,
+        },
+      },
+      {
+        connector_id: 2,
+        connectorType: 'Type B',
+        wattage: 280,
+        manufacturer: 'Manufacturer X',
+        chargePoint: {
+          chargePointName: 'Hp1',
+          isOnline: true,
+          chargeStation: _idofinsertedstationinget,
+        },
+      },
+    ]);
+
+    // Make request to retrieve connectors of the specified type
+    const Getresponse = await request(app)
+        .get('/connectorsGet/Type A')
+        .expect(200);
+
+    // Assert the response body contains the expected connectors
+    expect(Getresponse.body).to.be.an('array');
+    expect(Getresponse.body).to.have.lengthOf(2); // Assuming two connectors of the specified type were inserted
+    // Add more assertions as needed
+  });
+
+  // ----------------------------------------------------------//
+  it('should return status 500 and an error message if an error occurs', async () => {
+    // Mock an error by setting an invalid connectorType that doesn't exist in the database
+    const invalidConnectorType = 'NonexistentType';
+
+    // Make request to retrieve connectors with invalid connectorType
+    const response = await request(app)
+        .get(`/connectorsGet/${invalidConnectorType}`)
+        .expect(500);
+
+    // Assert the response body contains an error message
+    expect(response.body).to.be.an('object');
+    expect(response.body).to.have.property('connectorsGetmessage');
   });
 });

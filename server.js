@@ -18,6 +18,7 @@ app.post('/chargeStationsPost', async (req, res, next) => {
     }
 });
 
+
 // Route handler for creating connectors
 app.post('/connectorsPost', async (req, res, next) => {
   try {
@@ -27,6 +28,17 @@ app.post('/connectorsPost', async (req, res, next) => {
       res.status(500).json({Connectormessage: error.message}); // Pass the error to the error handling middleware
   }
 });
+
+app.get('/connectorsGet/:connectorType', async (req, res, next) => {
+    try {
+        const connectorType = req.params.connectorType;
+        const connectors = await EVConnectors.find({connectorType}); // Find connectors by connectorType
+        res.status(200).json(connectors);
+    } catch (error) {
+        res.status(500).json({connectorsGetmessage: error.message}); // Pass the error to the error handling middleware
+    }
+});
+
 
 async function connect() {
   const mongoServer = await MongoMemoryServer.create();
