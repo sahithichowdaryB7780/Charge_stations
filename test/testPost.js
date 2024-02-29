@@ -42,9 +42,6 @@ describe('POST /chargeStationsPost', () => {
     expect(response.body.amenities).to.deep.equal(stationData.amenities);
   });
   it('should return 500 when an error occurs', async () => {
-    // Drop the collection to force an error
-    await EVChargeStation.deleteMany({});
-
     const stationData = {
       // Missing required fields, which should cause a validation error
       // This will trigger the catch block
