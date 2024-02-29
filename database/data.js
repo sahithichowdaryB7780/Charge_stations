@@ -31,10 +31,10 @@ const chargePointSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
-  chargeStation: {
+  chargeStation: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'EVChargeStation',
-  },
+  }],
 
 });
 
@@ -56,7 +56,7 @@ const connectorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  chargePoint: [chargePointSchema],
+  chargePoint: chargePointSchema,
 });
 
 const EVConnector = mongoose.model('EVConnector', connectorSchema);
