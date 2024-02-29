@@ -19,6 +19,7 @@ app.use(errorHandler);
 app.post('/chargeStationsPost', async (req, res, next) => {
   try {
     const chargeStationProduct = await EVChargeStation.create(req.body);
+    console.log("connector created");
     res.status(200).json(chargeStationProduct);
   } catch (error) {
     next({ status: 500, message: error.message || 'Internal Server Error in Posting to chargestation' }); // Pass the error to the error handling middleware
