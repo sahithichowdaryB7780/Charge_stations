@@ -35,7 +35,7 @@ app.get('/connectorsGet/:connectorType', async (req, res, next) => {
         const connectors = await EVConnectors.find({connectorType}); // Find connectors by connectorType
         res.status(200).json(connectors);
     } catch (error) {
-        res.status(400).json({connectorsTypeNotFound: error.message}); // Pass the error to the error handling middleware
+        res.status(400); // Pass the error to the error handling middleware
     }
 });
 
