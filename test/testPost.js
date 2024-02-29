@@ -51,7 +51,7 @@ describe('CRUD operations', () => {
       // This will trigger the catch block
     };
 
-    const response = await request(app)
+    await request(app)
         .post('/chargeStationsPost')
         .send(stationData)
         .expect(500);
@@ -109,7 +109,7 @@ describe('CRUD operations', () => {
       // This will trigger the catch block
     };
 
-    const responseOfConnector = await request(app)
+ await request(app)
         .post('/connectorsPost')
         .send(connector)
         .expect(500);
