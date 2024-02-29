@@ -6,10 +6,10 @@ const app = express();
 app.use(express.json());
 
 // Define a middleware function for error handling
-const errorHandler = (error, req, res, next) => {
-  console.error(error.message); // Log the error message
-  res.status(500).json({ message: 'Internal Server Error' }); // Send a generic error response
-};
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal Server Error' });
+});
 
 // Use the error handling middleware
 app.use(errorHandler);
