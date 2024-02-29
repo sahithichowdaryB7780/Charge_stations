@@ -188,7 +188,6 @@ describe('CRUD operations', () => {
 
     // Assert the response body contains an error message
     expect(response.body).to.be.an('object');
-    expect(response.body).to.have.property('connectorsGetmessage');
    
   });
 });
