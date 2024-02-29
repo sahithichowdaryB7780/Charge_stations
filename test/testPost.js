@@ -9,14 +9,14 @@ describe('CRUD operations', () => {
   let mongoServer;
 
   // Start MongoDB Memory Server and connect to it before running tests
-  before(async () => {
+  beforeEach(async () => {
     mongoServer = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
 
 
   // Stop MongoDB Memory Server after running tests
-  after(async () => {
+  afterEach(async () => {
     await mongoose.disconnect(); // Disconnect from the database
     await mongoServer.stop(); // Stop MongoDB Memory Server
   });
