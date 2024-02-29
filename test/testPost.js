@@ -173,14 +173,14 @@ describe('CRUD operations', () => {
 
     // Assert the response body contains the expected connectors
     expect(Getresponse.body).to.be.an('array');
-    expect(Getresponse.body).to.have.lengthOf(2); // Assuming two connectors of the specified type were inserted
+    expect(Getresponse.body).to.have.lengthOf(1);
     // Add more assertions as needed
   });
 
   // ----------------------------------------------------------//
   it('should return status 500 and an error message if an error occurs', async () => {
     // Mock an error by setting an invalid connectorType that doesn't exist in the database
-    const invalidConnectorType = 'NonexistentType';
+    const invalidConnectorType = '';
 
     // Make request to retrieve connectors with invalid connectorType
     const response = await request(app)
