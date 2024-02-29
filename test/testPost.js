@@ -178,16 +178,17 @@ describe('CRUD operations', () => {
   });
 
   // ----------------------------------------------------------//
-  it('should return status 400 as the given type is not found', async () => {
+  it('should return status 404 as the given type is not found', async () => {
     // Mock an error by setting an invalid connectorType that doesn't exist in the database
     const nonExistentType = '';
     // Make request to retrieve connectors with invalid connectorType
     const response = await request(app)
         .get(`/connectorsGet/${nonExistentType}`)
-        .expect(400);
+        .expect(404);
 
     // Assert the response body contains an error message
     expect(response.body).to.be.an('object');
+    expect(response.body).to.have.property('connectorsGetmessage');
    
   });
 });
