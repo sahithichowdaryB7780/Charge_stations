@@ -21,7 +21,7 @@ describe('CRUD operations', () => {
     await mongoServer.stop(); // Stop MongoDB Memory Server
   });
 
-
+//It posts new station details
   it('should create a new station', async () => {
     const stationData = {
       chargeStationName: 'IndiEV',
@@ -44,7 +44,8 @@ describe('CRUD operations', () => {
   });
 
   // ----------------------------------------------------------//
-
+  
+//It fails in posting new station details
   it('should return 500 and an error message when an error occurs', async () => {
     const stationData = {
       // Missing required fields, which should cause a validation error
@@ -61,7 +62,8 @@ describe('CRUD operations', () => {
 
 
   // ----------------------------------------------------------//
-
+  
+//It posts constructor details
   it('should create a new connector', async () => {
     const stationData = {
       chargeStationName: 'RelEV',
@@ -105,11 +107,10 @@ describe('CRUD operations', () => {
     expect(response.body.chargePoint[0]).to.have.property('chargePointName', connector.chargePoint[0].chargePointName);
     expect(response.body.chargePoint[0]).to.have.property('isOnline', connector.chargePoint[0].isOnline);
     expect(response.body.chargePoint[0]).to.have.property('chargeStation');
-    // Assuming _idofinsertedstation is the ID of the inserted station, you might want to dynamically check if it exists
-    // You may also need to modify this check depending on how you handle the station ID
     expect(response.body.chargePoint[0].chargeStation[0]).to.equal(_idofinsertedstation);
   });
   // ----------------------------------------------------------//
+  //It failed in posting connector details
   it('should return 500 when an error occurs in posting to connector', async () => {
     const connector = {
       // Missing required fields, which should cause a validation error
@@ -121,11 +122,11 @@ describe('CRUD operations', () => {
         .send(connector)
         .expect(500);
     expect(response.body).to.be.an('object').and.to.have.property('Connectormessage');
-    // Check if the response contains the error message
   });
   // ----------------------------------------------------------//
+  
+  //It returs sucess if given connector type type exists in station
   it('should return connectors of the specified type and status 200 if successful', async () => {
-    // Insert mock data into the in-memory database
     const stationDataInGet = {
       chargeStationName: 'AdEV',
       address: '1st cross, ISRO Layout, Bangalore',
@@ -166,28 +167,25 @@ describe('CRUD operations', () => {
       },
     ]);
 
-    // Make request to retrieve connectors of the specified type
+    // Makeing request to retrieve connectors of the specified type
     const Getresponse = await request(app)
         .get('/connectorsGet/Type A')
         .expect(200);
-
-    // Assert the response body contains the expected connectors
     expect(Getresponse.body).to.be.an('array');
     expect(Getresponse.body).to.have.lengthOf(1);
-    // Add more assertions as needed
   });
 
   // ----------------------------------------------------------//
+  
+  //If non existent type of connector is given
   it('should return status 404 and an error message if no connectors are found for the specified type', async () => {
-    // Specify a connector type for which no connectors exist
     const nonExistentConnectorType = 'Type-Y';
 
-    // Make request to retrieve connectors for a nonexistent type
+    // Making request to retrieve connectors for a nonexistent type
     const response = await request(app)
         .get(`/connectorsGet/${nonExistentConnectorType}`)
         .expect(404);
 
-    // Assert the response body contains an error message
     expect(response.body).to.be.an('object');
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
   });
