@@ -1,5 +1,5 @@
 
-const {EVChargeStation} = require('./database/data.js');
+const {EVChargeStation} = require('./database/model.js');
 const {EVConnectors} = require('./database/model.js');
 const express = require('express');
 const {MongoMemoryServer} = require('mongodb-memory-server');
