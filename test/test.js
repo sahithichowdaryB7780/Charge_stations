@@ -3,7 +3,7 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const request = require('supertest');
 const {app, connect} = require('../server.js');
-const {EVConnectors} = require('../database/data.js');
+const {EVConnectors} = require('../database/model.js');
 
 describe('CRUD operations', () => {
   let mongoServer;
