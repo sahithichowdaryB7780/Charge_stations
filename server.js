@@ -1,6 +1,6 @@
 
 const {EVChargeStation} = require('./database/data.js');
-const {EVConnectors} = require('./database/data.js');
+const {EVConnectors} = require('./database/model.js');
 const express = require('express');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose'); // Import mongoose module
