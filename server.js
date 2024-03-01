@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+
 const {EVChargeStation} = require('./database/data.js');
 const {EVConnectors} = require('./database/data.js');
 const express = require('express');
@@ -29,6 +29,7 @@ app.post('/connectorsPost', async (req, res, next) => {
   }
 });
 
+//Route handler for checking station exista for given type connector
 app.get('/connectorsGet/:connectorType', async (req, res, next) => {
     const connectorType = req.params.connectorType;
     const connectors = await EVConnectors.find({connectorType});
