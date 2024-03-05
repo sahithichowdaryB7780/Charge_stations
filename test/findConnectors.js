@@ -132,7 +132,7 @@ describe('Find Connectors of specified Type', () => {
 
     // Send GET request to the route and expect a 200 response
     await request(app)
-        .get('/connectors/${ Type A } / close - to / ${ 50.71 } / ${ 49.06 }')
+        .get('/connectors/$Type A/close-to/50.71/49.06')
         .expect(200);
   });
   afterEach(async () => {
