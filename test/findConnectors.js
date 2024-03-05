@@ -4,6 +4,7 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
 const {EVConnectors} = require('../database/data.js');
 const {app, connect} = require('../server.js');
+const {createStationsAndConnectors} = require('../createConnectorsAndStations.js');
 describe('Find Connectors of specified Type', () => {
   let mongoServerInFind;
 
@@ -75,74 +76,14 @@ describe('Find Connectors of specified Type', () => {
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
   });
   it('should return connectors of the specified type near the given coordinates', async () => {
-    const stationDataForFindingStation1 = {
-      chargeStationName: 'AtEV',
-      address: '8th cross, ISRO Layout, Bangalore',
-      latitude: 50.34,
-      longitude: 50.78,
-      amenities: ['toilet', 'restro'],
-    };
-
-    // Send POST request to create a charge station
-    const responseStationForFindingStation1 = await request(app)
-        .post('/connectors')
-        .send(stationDataForFindingStation1);
-
-    const _idofinsertedstationinForFindingStation1 = responseStationForFindingStation1.body._id;
-
-    const stationDataForFindingStation2 = {
-      chargeStationName: 'ArEV',
-      address: '10th cross, ISRO Layout, Bangalore',
-      latitude: 49.34,
-      longitude: 49.78,
-      amenities: ['toilet'],
-    };
-
-    // Send POST request to create a charge station
-    const responseStationForFindingStation2 = await request(app)
-        .post('/connectors')
-        .send(stationDataForFindingStation2);
-
-    const _idofinsertedstationinForFindingStation2 = responseStationForFindingStation2.body._id;
-
-    await EVConnectors.create([
-      {
-        connector_id: 1,
-        connectorType: 'Type A',
-        wattage: 340,
-        manufacturer: 'Manufacturer O',
-        isOnline: false,
-        chargePoint: {
-          chargePointName: 'Hp2',
-          chargeStation: _idofinsertedstationinForFindingStation1,
-        },
-      },
-      {
-        connector_id: 13,
-        connectorType: 'Type A',
-        wattage: 640,
-        manufacturer: 'Manufacturer L',
-        isOnline: false,
-        chargePoint: {
-          chargePointName: 'Hi2',
-          chargeStation: _idofinsertedstationinForFindingStation2,
-        },
-      },
-    ]);
-
-    // Send GET request to the route and expect a 200 response
-    await request(app)
-        .get('/connectors/$Type A/close-to/50.71/49.06')
-        .expect(200)
-        .end((err, res) => {
-        if (err) {
-          return done(err); // Pass any errors to done()
-        }
-
-
-        done(); // Call done() to indicate that the test is complete
-      });
+    createStationsAndConnectors().then(() => {
+      return request(app)
+          .get('/connectors/$Type A/close-to/50.71/49.06')
+          .expect(200);
+    });
   });
+
+
   afterEach(async () => {
     await mongoose.disconnect(); // Disconnect from the database
     await mongoServerInFind.stop(); // Stop MongoDB Memory Server
