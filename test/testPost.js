@@ -1,6 +1,6 @@
 const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require('mongoose');
 const request = require('supertest');
+const mongoose = require('mongoose');
 const {expect} = require('chai');
 const {app, connect} = require('../server.js');
 describe('Post to Connectors and Stations', () => {
