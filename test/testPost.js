@@ -11,8 +11,6 @@ describe('Post to Connectors and Stations', () => {
     mongoServerInPost = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
-
-
   // Stop MongoDB Memory Server after running tests
   afterEach(async () => {
     // Disconnect from the database
