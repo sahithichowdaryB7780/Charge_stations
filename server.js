@@ -74,6 +74,33 @@ app.delete('/stations/:stationId', async (req, res) => {
     return res.status(500).json({message: 'Some internal error caused in deleting'});
   }
 });
+app.get('/connectors/:type/close-to/:latitude/:longitude',
+    async (req, res) => {
+      const {type, latitude, longitude} = req.params;
+
+      // Query for charge stations near the given latitude and longitude
+      const chargeStations = await EVChargeStation.find({
+        location: {
+          $near: {
+            $geometry: {
+              type: 'Point',
+              coordinates: [parseFloat(longitude), parseFloat(latitude)],
+            },
+          },
+        },
+      });
+
+      // Extract charge station IDs
+      const chargeStationIds = chargeStations.map((station) => station._id);
+
+      // Query for connectors of the specified type and associated with the found charge stations
+      const connectors = await EVConnectors.find({
+        'connectorType': type,
+        'chargePoint.chargeStation': {$in: chargeStationIds},
+      });
+
+      res.status(200).json(connectors);
+    });
 
 
 async function connect() {
@@ -84,5 +111,3 @@ async function connect() {
 }
 
 module.exports = {app, connect};
-
-

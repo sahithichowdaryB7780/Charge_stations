@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\database",
     "\\test"
   ],
-  "SelectedNode": "\\database",
+  "SelectedNode": "\\test\\findConnectors.js",
   "PreviewInSolutionExplorer": false
 }
