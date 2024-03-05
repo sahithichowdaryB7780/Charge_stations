@@ -1,24 +1,24 @@
 const {expect} = require('chai');
 const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require('mongoose');
+const mongooseInUpdate = require('mongoose');
 const request = require('supertest');
 const {app, connect} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
 
 describe('Update isOnline Field in Connectors', () => {
-  let mongoServer;
+  let mongoServerInUpdateOnline;
 
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
-    mongoServer = await MongoMemoryServer.create();
+    mongoServerInUpdateOnline = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
 
 
   // Stop MongoDB Memory Server after running tests
   afterEach(async () => {
-    await mongoose.disconnect(); // Disconnect from the database
-    await mongoServer.stop(); // Stop MongoDB Memory Server
+    await mongooseInUpdate.disconnect(); // Disconnect from the database
+    await mongoServerInUpdateOnline.stop(); // Stop MongoDB Memory Server
   });
   it('should update the isOnline field when the connector exists', async () => {
     // Create a new connector with an initial isOnline value of true

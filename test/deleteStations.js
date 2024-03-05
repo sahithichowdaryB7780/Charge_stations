@@ -1,19 +1,19 @@
 const {expect} = require('chai');
 const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require('mongoose');
+const mongooseInDelete = require('mongoose');
 const request = require('supertest');
 const {app, connect} = require('../server.js');
 const {EVChargeStation} = require('../database/data.js');
 describe('Delete Stations', () => {
-  let mongoServer;
+  let mongoServerInDelete;
   beforeEach(async () => {
-    mongoServer = await MongoMemoryServer.create();
+    mongoServerInDelete = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
 
   afterEach(async () => {
-    await mongoose.disconnect();
-    await mongoServer.stop();
+    await mongooseInDelete.disconnect();
+    await mongoServerInDelete.stop();
   });
 
   it('should delete the station and return a success message', async () => {

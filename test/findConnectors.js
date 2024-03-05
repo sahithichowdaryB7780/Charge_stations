@@ -1,24 +1,25 @@
 const {expect} = require('chai');
-const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require('mongoose');
-const request = require('supertest');
-const {app, connect} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
+const mongooseInFind = require('mongoose');
+const {app, connect} = require('../server.js');
+const {MongoMemoryServer} = require('mongodb-memory-server');
+const request = require('supertest');
 
 describe('Find Connectors of specified Type', () => {
-  let mongoServer;
+  let mongoServerInFindConnectors;
 
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
-    mongoServer = await MongoMemoryServer.create();
+    mongoServerInFindConnectors = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
 
 
   // Stop MongoDB Memory Server after running tests
   afterEach(async () => {
-    await mongoose.disconnect(); // Disconnect from the database
-    await mongoServer.stop(); // Stop MongoDB Memory Server
+    // Disconnects from the database dj
+    await mongooseInFind.disconnect(); // Disconnect from the database
+    await mongoServerInFindConnectors.stop(); // Stop MongoDB Memory Server
   });
   it('should return connectors of the specified type and status 200 if successful', async () => {
     const stationDataInGet = {
