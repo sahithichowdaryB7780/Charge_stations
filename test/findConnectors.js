@@ -1,16 +1,15 @@
 const {expect} = require('chai');
-const {EVConnectors} = require('../database/data.js');
-const mongooseInFind = require('mongoose');
-const {app, connect} = require('../server.js');
+const mongoose = require('mongoose');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
-
+const {EVConnectors} = require('../database/data.js');
+const {app, connect} = require('../server.js');
 describe('Find Connectors of specified Type', () => {
-  let mongoServerInFindConnectors;
+  let mongoServerInFind;
 
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
-    mongoServerInFindConnectors = await MongoMemoryServer.create();
+    mongoServerInFind = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
 
@@ -76,8 +75,7 @@ describe('Find Connectors of specified Type', () => {
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
   });
   afterEach(async () => {
-    // Disconnects from the database dj
-    await mongooseInFind.disconnect(); // Disconnect from the database
-    await mongoServerInFindConnectors.stop(); // Stop MongoDB Memory Server
+    await mongoose.disconnect(); // Disconnect from the database
+    await mongoServerInFind.stop(); // Stop MongoDB Memory Server
   });
 });

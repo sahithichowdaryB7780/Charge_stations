@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongooseInDelete = require('mongoose');
+const mongoose = require('mongoose');
 const request = require('supertest');
 const {app, connect} = require('../server.js');
 const {EVChargeStation} = require('../database/data.js');
@@ -10,6 +10,7 @@ describe('Delete Stations', () => {
     mongoServerInDelete = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
+
 
   it('should delete the station and return a success message', async () => {
     // Create a new station to delete
@@ -47,8 +48,9 @@ describe('Delete Stations', () => {
         .expect(500);
     expect(response.body.message).to.equal('Some internal error caused in deleting');
   });
+
   afterEach(async () => {
-    await mongooseInDelete.disconnect();
+    await mongoose.disconnect();
     await mongoServerInDelete.stop();
   });
 });
