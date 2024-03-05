@@ -3,7 +3,7 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongooseInUpdate = require('mongoose');
 const request = require('supertest');
 const {EVConnectors} = require('../database/data.js');
-const {app, connect} = require('../server.js');
+const {app, connectInOnline} = require('../server.js');
 
 describe('Update isOnline Field in Connectors', () => {
   let mongoServerInUpdateOnline;
@@ -11,7 +11,7 @@ describe('Update isOnline Field in Connectors', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
     mongoServerInUpdateOnline = await MongoMemoryServer.create();
-    await connect(); // Establish database connection
+    await connectInOnline(); // Establish database connection
   });
 
 

@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const {EVConnectors} = require('../database/data.js');
 const mongooseInFind = require('mongoose');
-const {app, connect} = require('../server.js');
+const {app, connectInFind} = require('../server.js');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
 
@@ -11,7 +11,7 @@ describe('Find Connectors of specified Type', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
     mongoServerInFindConnectors = await MongoMemoryServer.create();
-    await connect(); // Establish database connection
+    await connectInFind(); // Establish database connection
   });
 
 
