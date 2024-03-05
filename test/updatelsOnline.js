@@ -3,7 +3,7 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongooseInUpdate = require('mongoose');
 const request = require('supertest');
 const {EVConnectors} = require('../database/data.js');
-const {app, connectInOnline} = require('../server.js');
+const {app, connect} = require('../server.js');
 
 describe('Update isOnline Field in Connectors', () => {
   let mongoServerInUpdateOnline;
@@ -11,15 +11,10 @@ describe('Update isOnline Field in Connectors', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
     mongoServerInUpdateOnline = await MongoMemoryServer.create();
-    await connectInOnline(); // Establish database connection
+    await connect(); // Establish database connection
   });
 
 
-  // Stop MongoDB Memory Server after running tests
-  afterEach(async () => {
-    await mongooseInUpdate.disconnect(); // Disconnect from the database
-    await mongoServerInUpdateOnline.stop(); // Stop MongoDB Memory Server
-  });
   it('should update the isOnline field when the connector exists', async () => {
     // Create a new connector with an initial isOnline value of true
     const createdConnector = await EVConnectors.create({
@@ -58,4 +53,8 @@ describe('Update isOnline Field in Connectors', () => {
     expect(response.body.message).to.equal('Some internal error caused');
   });
   // ----------------------------------------------------------//
+  afterEach(async () => {
+    await mongooseInUpdate.disconnect(); // Disconnect from the database
+    await mongoServerInUpdateOnline.stop(); // Stop MongoDB Memory Server
+  });
 });

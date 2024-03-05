@@ -1,6 +1,6 @@
 const {expect} = require('chai');
 const mongooseInPost = require('mongoose');
-const {app, connectInPost} = require('../server.js');
+const {app, connect} = require('../server.js');
 const request = require('supertest');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 describe('Post to Connectors and Stations', () => {
@@ -9,14 +9,9 @@ describe('Post to Connectors and Stations', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
     mongoServerInPost = await MongoMemoryServer.create();
-    await connectInPost(); // Establish database connection
+    await connect(); // Establish database connection
   });
   // Stop MongoDB Memory Server after running tests
-  afterEach(async () => {
-    // Disconnect from the database
-    await mongooseInPost.disconnect();
-    await mongoServerInPost.stop(); // Stop MongoDB Memory Server
-  });
 
 
   it('should create a new station', async () => {
@@ -119,4 +114,9 @@ describe('Post to Connectors and Stations', () => {
     expect(response.body).to.be.an('object').and.to.have.property('Connectormessage');
   });
   // ----------------------------------------------------------//
+  afterEach(async () => {
+    // Disconnect from the database
+    await mongooseInPost.disconnect();
+    await mongoServerInPost.stop(); // Stop MongoDB Memory Server
+  });
 });

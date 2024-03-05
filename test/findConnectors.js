@@ -1,7 +1,7 @@
 const {expect} = require('chai');
 const {EVConnectors} = require('../database/data.js');
 const mongooseInFind = require('mongoose');
-const {app, connectInFind} = require('../server.js');
+const {app, connect} = require('../server.js');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
 
@@ -11,16 +11,9 @@ describe('Find Connectors of specified Type', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   beforeEach(async () => {
     mongoServerInFindConnectors = await MongoMemoryServer.create();
-    await connectInFind(); // Establish database connection
+    await connect(); // Establish database connection
   });
 
-
-  // Stop MongoDB Memory Server after running tests
-  afterEach(async () => {
-    // Disconnects from the database dj
-    await mongooseInFind.disconnect(); // Disconnect from the database
-    await mongoServerInFindConnectors.stop(); // Stop MongoDB Memory Server
-  });
   it('should return connectors of the specified type and status 200 if successful', async () => {
     const stationDataInGet = {
       chargeStationName: 'AdEV',
@@ -81,5 +74,10 @@ describe('Find Connectors of specified Type', () => {
         .expect(404);
     expect(response.body).to.be.an('object');
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
+  });
+  afterEach(async () => {
+    // Disconnects from the database dj
+    await mongooseInFind.disconnect(); // Disconnect from the database
+    await mongoServerInFindConnectors.stop(); // Stop MongoDB Memory Server
   });
 });
