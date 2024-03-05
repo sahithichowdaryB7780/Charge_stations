@@ -27,10 +27,6 @@ const chargePointSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isOnline: {
-    type: Boolean,
-    required: true,
-  },
   chargeStation: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'EVChargeStation',
@@ -54,6 +50,10 @@ const connectorSchema = new mongoose.Schema({
   },
   manufacturer: {
     type: String,
+    required: true,
+  },
+  isOnline: {
+    type: Boolean,
     required: true,
   },
   chargePoint: [chargePointSchema],
