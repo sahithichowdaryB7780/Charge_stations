@@ -69,7 +69,7 @@ describe('Find Connectors of specified Type', () => {
 
         // Make request to retrieve connectors for a nonexistent type
         const response = await request(app)
-            .get(/connectors/${ nonExistentConnectorType })
+            .get(`/connectors/${nonExistentConnectorType}`)
             .expect(404);
         expect(response.body).to.be.an('object');
         expect(response.body).to.have.property('message', 'No connectors found for the specified type');
