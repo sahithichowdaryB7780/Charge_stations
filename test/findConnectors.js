@@ -134,6 +134,14 @@ describe('Find Connectors of specified Type', () => {
     await request(app)
         .get('/connectors/$Type A/close-to/50.71/49.06')
         .expect(200);
+        .end((err, res) => {
+        if (err) {
+          return done(err); // Pass any errors to done()
+        }
+
+
+        done(); // Call done() to indicate that the test is complete
+      });
   });
   afterEach(async () => {
     await mongoose.disconnect(); // Disconnect from the database
