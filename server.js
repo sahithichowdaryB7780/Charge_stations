@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const app = express();
-const getConnectorsByGeoLocation = require('./getConnectorsByGeoLocation');
+const {getConnectorsByGeoLocation} = require('./getConnectorsByGeoLocation');
 
 app.use(bodyParser.json());
 
@@ -73,19 +73,6 @@ app.delete('/stations/:stationId', async (req, res) => {
     return res.status(200).json({message: 'Station deleted successfully', deletedStation});
   } catch (error) {
     return res.status(500).json({message: 'Some internal error caused in deleting'});
-  }
-});
-app.get('/connectorsbasedonloc', async (req, res) => {
-  try {
-    const {longitude, latitude, connectorType} = req.body;
-
-    // Use the provided function to get connectors by geographic location
-    const connectors = await getConnectorsByGeoLocation(parseFloat(latitude), parseFloat(longitude), connectorType);
-
-    res.status(200).json(connectors);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({error: 'Internal Server Error'});
   }
 });
 

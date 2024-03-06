@@ -4,7 +4,7 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
 const {EVConnectors} = require('../database/data.js');
 const {app, connect} = require('../server.js');
-const {createStationsAndConnectors} = require('../createConnectorsAndStations.js');
+const {createConnectorsAndStations} = require('../createConnectorsAndStations.js');
 describe('Find Connectors of specified Type', () => {
   let mongoServerInFind;
 
@@ -75,21 +75,6 @@ describe('Find Connectors of specified Type', () => {
     expect(response.body).to.be.an('object');
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
   });
-  it('should return connectors of the specified type near the given coordinates', async () => {
-    createStationsAndConnectors().then(() => {
-      const longitude = 50.987;
-      const latitude = 51.456;
-      const connectorType = 'Type A';
-      const response = request(app)
-          .get('/connectorsbasedonloc')
-          .send({longitude, latitude, connectorType})
-          .expect(200);
-      expect(response.body).to.be.an('array');
-      expect(response.body).to.have.lengthOf(2);
-    });
-  });
-
-
   afterEach(async () => {
     await mongoose.disconnect(); // Disconnect from the database
     await mongoServerInFind.stop(); // Stop MongoDB Memory Server
