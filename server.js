@@ -75,31 +75,35 @@ app.delete('/stations/:stationId', async (req, res) => {
   }
 });
 app.get('/connectors/:type/:latitude/:longitude', async (req, res) => {
-  const {type, latitude, longitude} = req.params;
+  try {
+    const {type, latitude, longitude} = req.params;
 
-  // Query for charge stations near the given latitude and longitude
-  const chargeStations = await EVChargeStation.find({
-    location: {
-      $near: {
-        $geometry: {
-          type: 'Point',
-          coordinates: [parseFloat(longitude), parseFloat(latitude)],
+    // Query for charge stations near the given latitude and longitude
+    const chargeStations = await EVChargeStation.find({
+      location: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates: [parseFloat(longitude), parseFloat(latitude)],
+          },
+          $maxDistance: 100000,
         },
-        $maxDistance: 100000,
       },
-    },
-  });
+    });
 
-  // Extract charge station IDs
-  const chargeStationIds = chargeStations.map((station) => station._id);
+    // Extract charge station IDs
+    const chargeStationIds = chargeStations.map((station) => station._id);
 
-  // Query for connectors of the specified type and associated with the found charge stations
-  const connectors = await EVConnectors.find({
-    'connectorType': type,
-    'chargePoint.chargeStation': {$in: chargeStationIds},
-  });
+    // Query for connectors of the specified type and associated with the found charge stations
+    const connectors = await EVConnectors.find({
+      'connectorType': type,
+      'chargePoint.chargeStation': {$in: chargeStationIds},
+    });
 
-  res.status(200).json(connectors);
+    res.status(200).json(connectors);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 
