@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const app = express();
+const getConnectorsByGeoLocation = require('./getConnectorsByGeoLocation');
 
 app.use(bodyParser.json());
 
@@ -78,31 +79,13 @@ app.get('/connectors/:type/:latitude/:longitude', async (req, res) => {
   try {
     const {type, latitude, longitude} = req.params;
 
-    // Query for charge stations near the given latitude and longitude
-    const chargeStations = await EVChargeStation.find({
-      location: {
-        $near: {
-          $geometry: {
-            type: 'Point',
-            coordinates: [parseFloat(longitude), parseFloat(latitude)],
-          },
-          $maxDistance: 100000,
-        },
-      },
-    });
-
-    // Extract charge station IDs
-    const chargeStationIds = chargeStations.map((station) => station._id);
-
-    // Query for connectors of the specified type and associated with the found charge stations
-    const connectors = await EVConnectors.find({
-      'connectorType': type,
-      'chargePoint.chargeStation': {$in: chargeStationIds},
-    });
+    // Use the provided function to get connectors by geographic location
+    const connectors = await getConnectorsByGeoLocation(parseFloat(latitude), parseFloat(longitude), type);
 
     res.status(200).json(connectors);
   } catch (error) {
     console.log(error);
+    res.status(500).json({error: 'Internal Server Error'});
   }
 });
 
