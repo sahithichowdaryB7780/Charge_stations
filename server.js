@@ -85,7 +85,8 @@ app.get('/connectors/:type/close-to/:latitude/:longitude',
             $geometry: {
               type: 'Point',
               coordinates: [parseFloat(longitude), parseFloat(latitude)],
-            },
+                },
+                $maxDistance: 100000,
           },
         },
       });
