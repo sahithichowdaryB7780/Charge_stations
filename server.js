@@ -77,10 +77,10 @@ app.delete('/stations/:stationId', async (req, res) => {
 });
 app.get('/connectors/:type/:latitude/:longitude', async (req, res) => {
   try {
-    const {type, latitude, longitude} = req.params;
+    const {longitude, latitude, connectorType} = req.body;
 
     // Use the provided function to get connectors by geographic location
-    const connectors = await getConnectorsByGeoLocation(parseFloat(latitude), parseFloat(longitude), type);
+    const connectors = await getConnectorsByGeoLocation(parseFloat(latitude), parseFloat(longitude), connectorType);
 
     res.status(200).json(connectors);
   } catch (error) {

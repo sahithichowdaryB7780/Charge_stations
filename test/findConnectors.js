@@ -77,8 +77,12 @@ describe('Find Connectors of specified Type', () => {
   });
   it('should return connectors of the specified type near the given coordinates', async () => {
     createStationsAndConnectors().then(() => {
+      const longitude = 50.987;
+      const latitude = 51.456;
+      const connectorType = 'Type A';
       const response = request(app)
-          .get('/connectors/Type A/50.71/49.06')
+          .get('/connectorsbasedonloc')
+          .send({longitude, latitude, connectorType})
           .expect(200);
       expect(response.body).to.be.an('array');
       expect(response.body).to.have.lengthOf(2);
