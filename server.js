@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const app = express();
-const {getConnectorsByGeoLocation} = require('./getConnectorsByGeoLocation');
 
 app.use(bodyParser.json());
 

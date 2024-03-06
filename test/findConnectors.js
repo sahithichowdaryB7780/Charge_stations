@@ -4,7 +4,6 @@ const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
 const {EVConnectors} = require('../database/data.js');
 const {app, connect} = require('../server.js');
-const {createConnectorsAndStations} = require('../createConnectorsAndStations.js');
 describe('Find Connectors of specified Type', () => {
   let mongoServerInFind;
 
