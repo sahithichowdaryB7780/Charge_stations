@@ -75,7 +75,7 @@ app.delete('/stations/:stationId', async (req, res) => {
     return res.status(500).json({message: 'Some internal error caused in deleting'});
   }
 });
-app.get('/connectors/:type/:latitude/:longitude', async (req, res) => {
+app.get('/connectorsbasedonloc', async (req, res) => {
   try {
     const {longitude, latitude, connectorType} = req.body;
 
