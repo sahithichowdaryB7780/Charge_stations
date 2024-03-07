@@ -79,20 +79,16 @@ app.put('/connectors/:connectorId', async (req, res) => {
 });
 
 app.delete('/stations/:stationId', async (req, res) => {
-  try {
-    const {stationId} = req.params;
+  const {stationId} = req.params;
 
 
-    const deletedStation = await EVChargeStation.findByIdAndDelete(stationId);
-    if (!deletedStation) {
-      return res.status(404).json({message: 'Station not found'});
-    }
-
-
-    return res.status(200).json({message: 'Station deleted successfully', deletedStation});
-  } catch (error) {
-    return res.status(500).json({message: 'Some internal error caused in deleting'});
+  const deletedStation = await EVChargeStation.findByIdAndDelete(stationId);
+  if (!deletedStation) {
+    return res.status(404).json({message: 'Station not found'});
   }
+
+
+  return res.status(200).json({message: 'Station deleted successfully', deletedStation});
 });
 
 

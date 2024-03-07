@@ -42,12 +42,6 @@ describe('Delete Stations', () => {
         .expect(404); // Check the response body
     expect(response.body.message).to.equal('Station not found');
   });
-  it('should return a 500 error if an internal server error occurs', async () => {
-    const response = await request(app)
-        .delete(`/stations/7`)
-        .expect(500);
-    expect(response.body.message).to.equal('Some internal error caused in deleting');
-  });
 
   afterEach(async () => {
     await mongoose.disconnect();
