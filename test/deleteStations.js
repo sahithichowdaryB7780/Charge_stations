@@ -39,7 +39,7 @@ describe('Delete Stations', () => {
     const invalidStationId = '609e11d67b4f3335940f3b9c'; // Assuming this ID doesn't exist
     const response = await request(app)
         .delete(`/stations/${invalidStationId}`)
-        .expect(404); // Check the response body
+        .expect(400); // Check the response body
     expect(response.body.message).to.equal('Station not found');
   });
 

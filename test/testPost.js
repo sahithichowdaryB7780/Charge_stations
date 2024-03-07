@@ -47,7 +47,7 @@ describe('Post to Connectors and Stations', () => {
     const response = await request(app)
         .post('/chargeStations')
         .send(stationData)
-        .expect(500);
+        .expect(400);
 
     expect(response.body).to.be.an('object').and.to.have.property('Stationmessage');
   });
@@ -112,7 +112,7 @@ describe('Post to Connectors and Stations', () => {
     const response = await request(app)
         .post('/connectors')
         .send(connector)
-        .expect(500);
+        .expect(400);
     expect(response.body).to.be.an('object').and.to.have.property('Connectormessage');
   });
   // ----------------------------------------------------------//

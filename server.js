@@ -15,7 +15,7 @@ app.post('/chargeStations', async (req, res, next) => {
     const chargeStationProduct = await EVChargeStation.create(req.body);
     res.status(200).json(chargeStationProduct);
   } catch (error) {
-    res.status(500).json({Stationmessage: error.message});
+    res.status(400).json({Stationmessage: error.message});
   }
 });
 
@@ -25,7 +25,7 @@ app.post('/connectors', async (req, res, next) => {
     const connectorProduct = await EVConnectors.create(req.body);
     res.status(200).json(connectorProduct);
   } catch (error) {
-    res.status(500).json({Connectormessage: error.message}); // Pass the error to the error handling middleware
+    res.status(400).json({Connectormessage: error.message});
   }
 });
 
@@ -53,41 +53,33 @@ app.get('/connectors/existing/:connectorType', async (req, res, next) => {
   const connectors = await EVConnectors.find({connectorType});
 
   if (connectors.length === 0) {
-    res.status(404).json({message: 'No connectors found for the specified type'});
+    res.status(400).json({message: 'No connectors found for the specified type'});
   } else {
     res.status(200).json(connectors);
   }
 });
 
 app.put('/connectors/:connectorId', async (req, res) => {
-  try {
-    const {connectorId} = req.params;
-    const {isOnline} = req.body;
+  const {connectorId} = req.params;
+  const {isOnline} = req.body;
 
-    const connector = await EVConnectors.findById(connectorId);
-    if (!connector) {
-      return res.status(404).json({message: 'Connector not found'});
-    }
-    connector.isOnline = isOnline;
-
-    await connector.save();
-
-    return res.status(200).json({message: 'Charge point updated successfully', connector});
-  } catch (error) {
-    return res.status(500).json({message: 'Some internal error caused'});
+  const connector = await EVConnectors.findById(connectorId);
+  if (!connector) {
+    return res.status(400).json({message: 'Connector not found'});
   }
+  connector.isOnline = isOnline;
+
+  await connector.save();
+
+  return res.status(200).json({message: 'Charge point updated successfully', connector});
 });
 
 app.delete('/stations/:stationId', async (req, res) => {
   const {stationId} = req.params;
-
-
   const deletedStation = await EVChargeStation.findByIdAndDelete(stationId);
   if (!deletedStation) {
-    return res.status(404).json({message: 'Station not found'});
+    return res.status(400).json({message: 'Station not found'});
   }
-
-
   return res.status(200).json({message: 'Station deleted successfully', deletedStation});
 });
 

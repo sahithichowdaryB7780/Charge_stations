@@ -34,25 +34,15 @@ describe('Update isOnline Field in Connectors', () => {
     expect(response.body.message).to.equal('Charge point updated successfully');
     expect(response.body.connector.isOnline).to.equal(false);
   });
-  // ----------------------------------------------------------//
   it('should return a  error if  connector does not exist', async () => {
     // Send a DELETE request with an invalid station ID
     const invalidConnectorId = '609e11d67b4f3335940f3b9c';
     const response = await request(app)
         .put(`/connectors/${invalidConnectorId}`)
-        .expect(404);
+        .expect(400);
     expect(response.body.message).to.equal('Connector not found');
   });
 
-  // ----------------------------------------------------------//
-  it('should return a 500 error when an internal server error occurs', async () => {
-    const response = await request(app)
-        .put(`/connectors/7`)
-        .send({isOnline: false});
-    expect(response.status).to.equal(500);
-    expect(response.body.message).to.equal('Some internal error caused');
-  });
-  // ----------------------------------------------------------//
   // Stop MongoDB Memory Server after running tests
   afterEach(async () => {
     await mongoose.disconnect(); // Disconnect from the database
