@@ -48,7 +48,7 @@ app.get('/connectors/:connectorId', async (req, res) => {
   res.status(200).json(responseData);
 });
 
-app.get('/connectors/:connectorType', async (req, res, next) => {
+app.get('/connectors/existing/:connectorType', async (req, res, next) => {
   const connectorType = req.params.connectorType;
   const connectors = await EVConnectors.find({connectorType});
 

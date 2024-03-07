@@ -53,7 +53,7 @@ describe('Find Connectors of specified Type', () => {
 
     // Make request to retrieve connectors of the  type A
     const Getresponse = await request(app)
-        .get('/connectors/Type A')
+        .get('/connectors/existing/Type A')
         .expect(200);
     expect(Getresponse.body).to.be.an('array');
     expect(Getresponse.body).to.have.lengthOf(1);
@@ -66,7 +66,7 @@ describe('Find Connectors of specified Type', () => {
 
     // Make request to retrieve connectors for a nonexistent type
     const response = await request(app)
-        .get(`/connectors/${nonExistentConnectorType}`)
+        .get(`/connectors/existing/${nonExistentConnectorType}`)
         .expect(404);
     expect(response.body).to.be.an('object');
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
