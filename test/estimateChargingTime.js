@@ -11,7 +11,7 @@ const {describe, it} = require('mocha');
 describe('Use nock to mimic API requests', () => {
   let mongoServerInEstimateChargingTime;
   // Start MongoDB Memory Server and connect to it before running tests
-  beforeEach(async () => {
+  before(async () => {
     mongoServerInEstimateChargingTime = await MongoMemoryServer.create();
     await connect(); // Establish database connection
   });
@@ -36,7 +36,7 @@ describe('Use nock to mimic API requests', () => {
       expect(connectorResultReturnedOnEstiChargeTime.body.isOnline).to.equal(true);
       expect(connectorResultReturnedOnEstiChargeTime.body.manufacturer).to.equal('Manufacturer -D');
   });
-  afterEach(async () => {
+  after(async () => {
     await mongoose.disconnect(); // Disconnect from the database
     await mongoServerInEstimateChargingTime.stop(); // Stop MongoDB Memory Server
   });

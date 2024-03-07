@@ -2,7 +2,7 @@ const {expect} = require('chai');
 const mongoose = require('mongoose');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
-const {EVConnectors} = require('../database/data.js');
+const {EVConnectors, EVChargeStation} = require('../database/data.js');
 const {app, connect} = require('../server.js');
 describe('Find Connectors of specified Type', () => {
   let mongoServerInFind;
@@ -22,12 +22,9 @@ describe('Find Connectors of specified Type', () => {
       amenities: ['toilet'],
     };
 
-    // Send POST request to create a charge station
-    const responseStationInGet = await request(app)
-        .post('/chargeStations')
-        .send(stationDataInGet);
+    const responseStationInGet = await EVChargeStation.create(stationDataInGet);
 
-    const _idofinsertedstationinget = responseStationInGet.body._id;
+    const _idofinsertedstationinget = responseStationInGet._id;
 
     await EVConnectors.create([
       {
