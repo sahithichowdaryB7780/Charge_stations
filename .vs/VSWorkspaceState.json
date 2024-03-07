@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
+    "\\database",
     "\\test"
   ],
-  "SelectedNode": "\\checkmycode.sh",
+  "SelectedNode": "\\test\\estimateChargingTime.js",
   "PreviewInSolutionExplorer": false
 }

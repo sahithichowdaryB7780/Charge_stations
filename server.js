@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const app = express();
+const axios = require('axios');
 
 app.use(bodyParser.json());
 
@@ -26,6 +27,25 @@ app.post('/connectors', async (req, res, next) => {
   } catch (error) {
     res.status(500).json({Connectormessage: error.message}); // Pass the error to the error handling middleware
   }
+});
+
+
+app.get('/connectors/:connectorId', async (req, res) => {
+  const {soc, batteryCapacity} = req.body;
+  const connectorId = req.params.connectorId;
+  const connectorData = await EVConnectors.findOne({_id: connectorId});
+  const estimationResponse = await axios.post('http://localhost:8080/estimate-charging-time', {
+    batteryCapacity: parseFloat(batteryCapacity),
+    stateOfCharge: parseFloat(soc),
+    power: connectorData.wattage,
+  });
+  const responseData = {
+    connectorType: connectorData.connectorType,
+    isOnline: connectorData.isOnline,
+    manufacturer: connectorData.manufacturer,
+    estimateChargingTime: estimationResponse.data.estimateChargingTime,
+  };
+  res.status(200).json(responseData);
 });
 
 app.get('/connectors/:connectorType', async (req, res, next) => {
