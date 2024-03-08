@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
+    "\\.github",
+    "\\database",
     "\\test"
   ],
-  "SelectedNode": "\\test\\deleteStations.js",
+  "SelectedNode": "\\test\\z-estimateChargingTime.js",
   "PreviewInSolutionExplorer": false
 }

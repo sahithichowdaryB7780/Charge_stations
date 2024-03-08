@@ -1,17 +1,15 @@
 const {expect} = require('chai');
-const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
-const {app, connect} = require('../server.js');
-const mongoose = require('mongoose');
+const {connect, dropDB, closeConnectionDB} = require('../connection.js');
+const {app, seturi} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
 
-describe('Update isOnline Field in Connectors', () => {
-  let mongoServerInUpdate;
 
-  // Start MongoDB Memory Server and connect to it before running tests
-  beforeEach(async () => {
-    mongoServerInUpdate = await MongoMemoryServer.create();
-    await connect(); // Establish database connection
+describe('Update isOnline Field in Connectors', () => {
+  before(async () => {
+    delete process.env.uri;
+    const uri = await seturi();
+    await connect(uri);
   });
 
 
@@ -34,7 +32,7 @@ describe('Update isOnline Field in Connectors', () => {
     expect(response.body.message).to.equal('Charge point updated successfully');
     expect(response.body.connector.isOnline).to.equal(false);
   });
-  it('should return a  error if  connector does not exist', async () => {
+  it('should return a 400 error if  connector does not exist', async () => {
     // Send a DELETE request with an invalid station ID
     const invalidConnectorId = '609e11d67b4f3335940f3b9c';
     const response = await request(app)
@@ -42,10 +40,10 @@ describe('Update isOnline Field in Connectors', () => {
         .expect(400);
     expect(response.body.message).to.equal('Connector not found');
   });
-
-  // Stop MongoDB Memory Server after running tests
   afterEach(async () => {
-    await mongoose.disconnect(); // Disconnect from the database
-    await mongoServerInUpdate.stop(); // Stop MongoDB Memory Server
+    await dropDB();
+  });
+  after(async () => {
+    await closeConnectionDB();
   });
 });
