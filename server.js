@@ -2,13 +2,24 @@ const {EVChargeStation} = require('./database/data.js');
 const {EVConnectors} = require('./database/data.js');
 const express = require('express');
 const bodyParser = require('body-parser');
-const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require('mongoose');
 const app = express();
 const axios = require('axios');
-
 app.use(bodyParser.json());
-
+const {getURL, connect} = require('./connection.js');
+require('dotenv').config();
+const PORT = 3005;
+app.use(bodyParser.json());
+async function seturi() {
+  const uri = process.env.uri || getURL();
+  return uri;
+}
+const uri=seturi();
+connect(uri)
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+      });
+    });
 
 app.post('/chargeStations', async (req, res, next) => {
   try {
@@ -82,13 +93,7 @@ app.delete('/stations/:stationId', async (req, res) => {
   }
   return res.status(200).json({message: 'Station deleted successfully', deletedStation});
 });
-
-
-async function connect() {
-  const mongoServer = await MongoMemoryServer.create();
-  const mongoUri = mongoServer.getUri();
-
-  await mongoose.connect(mongoUri, {});
-}
-
-module.exports = {app, connect};
+module.exports = {
+  seturi,
+  app,
+};

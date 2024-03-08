@@ -1,17 +1,14 @@
+const {connect, dropDB, closeConnectionDB} = require('../connection.js');
+const {app, seturi} = require('../server.js');
 const {expect} = require('chai');
-const {MongoMemoryServer} = require('mongodb-memory-server');
-const mongoose = require('mongoose');
 const request = require('supertest');
-const {app, connect} = require('../server.js');
 const {EVChargeStation} = require('../database/data.js');
 describe('Delete Stations', () => {
-  let mongoServerInDelete;
-  beforeEach(async () => {
-    mongoServerInDelete = await MongoMemoryServer.create();
-    await connect(); // Establish database connection
+  before(async () => {
+    delete process.env.uri;
+    const uri = await seturi();
+    await connect(uri);
   });
-
-
   it('should delete the station and return a success message', async () => {
     // Create a new station to delete
     const newStation = await EVChargeStation.create({
@@ -34,7 +31,7 @@ describe('Delete Stations', () => {
     const deletedStation = await EVChargeStation.findById(newStation._id);
     expect(deletedStation).to.be.null;
   });
-  it('should return a  error if the station does not exist', async () => {
+  it('should return a 400 error if the station does not exist', async () => {
     // Send a DELETE request with an invalid station ID
     const invalidStationId = '609e11d67b4f3335940f3b9c'; // Assuming this ID doesn't exist
     const response = await request(app)
@@ -42,9 +39,10 @@ describe('Delete Stations', () => {
         .expect(400); // Check the response body
     expect(response.body.message).to.equal('Station not found');
   });
-
   afterEach(async () => {
-    await mongoose.disconnect();
-    await mongoServerInDelete.stop();
+    await dropDB();
+  });
+  after(async () => {
+    await closeConnectionDB();
   });
 });

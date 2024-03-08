@@ -1,15 +1,14 @@
-const {MongoMemoryServer} = require('mongodb-memory-server');
 const request = require('supertest');
-const mongoose = require('mongoose');
 const {expect} = require('chai');
-const {app, connect} = require('../server.js');
+const {app} = require('../server.js');
+const {seturi} = require('../server.js');
+const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 describe('Post to Connectors and Stations', () => {
-  let mongoServerInPost;
-
   // Start MongoDB Memory Server and connect to it before running tests
-  beforeEach(async () => {
-    mongoServerInPost = await MongoMemoryServer.create();
-    await connect(); // Establish database connection
+  before(async () => {
+    delete process.env.uri;
+    const uri = await seturi();
+    await connect(uri);
   });
 
 
@@ -38,7 +37,7 @@ describe('Post to Connectors and Stations', () => {
 
   // ----------------------------------------------------------//
 
-  it('should return 500 and an error message when an error occurs', async () => {
+  it('should return 400 and an error message when data passing is wrong', async () => {
     const stationData = {
       // Missing required fields, which should cause a validation error
       // This will trigger the catch block
@@ -103,7 +102,7 @@ describe('Post to Connectors and Stations', () => {
     expect(response.body.chargePoint[0].chargeStation[0]).to.equal(_idofinsertedstation);
   });
   // ----------------------------------------------------------//
-  it('should return 500 when an error occurs in posting to connector', async () => {
+  it('should return 400 when posting to connector goes wrong', async () => {
     const connector = {
       // Missing required fields, which should cause a validation error
       // This will trigger the catch block
@@ -117,7 +116,9 @@ describe('Post to Connectors and Stations', () => {
   });
   // ----------------------------------------------------------//
   afterEach(async () => {
-    await mongoose.disconnect(); // Disconnect from the database
-    await mongoServerInPost.stop(); // Stop MongoDB Memory Server
+    await dropDB();
+  });
+  after(async () => {
+    await closeConnectionDB();
   });
 });

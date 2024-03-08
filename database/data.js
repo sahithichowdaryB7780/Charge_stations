@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 // Records Charge station details
 const evChargeStationSchema = new mongoose.Schema({
   chargeStationName: {
@@ -62,4 +61,7 @@ const connectorSchema = new mongoose.Schema({
 const EVConnectors = mongoose.model('EVConnector', connectorSchema);
 const EVChargeStation = mongoose.model('EVChargeStation', evChargeStationSchema);
 
-module.exports = {EVConnectors, EVChargeStation};
+module.exports = {
+  EVConnectors,
+  EVChargeStation,
+};
