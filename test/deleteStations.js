@@ -6,8 +6,8 @@ const {EVChargeStation} = require('../database/data.js');
 describe('Delete Stations', () => {
   before(async () => {
     delete process.env.uri;
-    const uri = await seturi();
-    await connect(uri);
+    const uriInDeleteStation = await seturi();
+    await connect(uriInDeleteStation);
   });
   after(async () => {
     await closeConnectionDB();
@@ -44,8 +44,5 @@ describe('Delete Stations', () => {
   });
   afterEach(async () => {
     await dropDB();
-  });
-  after(async () => {
-    await closeConnectionDB();
   });
 });

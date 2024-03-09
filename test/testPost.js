@@ -7,8 +7,6 @@ describe('Post to Connectors and Stations', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   before(async () => {
     delete process.env.uri;
-    const uri = await seturi();
-    await connect(uri);
     const uriInTestPost = await seturi();
     await connect(uriInTestPost);
   });

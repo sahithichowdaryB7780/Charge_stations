@@ -10,10 +10,11 @@ const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 describe('Use nock to mimic API requests', () => {
     before(async () => {
         delete process.env.uri;
-        const uri = await seturi();
-        await connect(uri);
         const uriInEstimateChargingTime = await seturi();
         await connect(uriInEstimateChargingTime);
+    });
+    afterEach(async () => {
+        await dropDB();
     });
   it('should return connector data with estimated charging time', async () => {
     nock('http://localhost:8080')
@@ -36,9 +37,6 @@ describe('Use nock to mimic API requests', () => {
       expect(connectorResultReturnedOnEstiChargeTime.body.isOnline).to.equal(true);
       expect(connectorResultReturnedOnEstiChargeTime.body.manufacturer).to.equal('Manufacturer -D');
   });
-    afterEach(async () => {
-        await dropDB();
-    });
     after(async () => {
         await closeConnectionDB();
     });
