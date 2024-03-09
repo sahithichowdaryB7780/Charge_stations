@@ -6,8 +6,8 @@ const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 describe('Find Connectors of specified Type', () => {
   before(async () => {
     delete process.env.uri;
-    const uri = await seturi();
-    await connect(uri);
+    const uriInFindConnectors = await seturi();
+    await connect(uriInFindConnectors);
   });
 
   it('should return connectors of the specified type and status 200 if successful', async () => {
