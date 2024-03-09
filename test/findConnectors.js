@@ -1,13 +1,12 @@
 const {expect} = require('chai');
 const request = require('supertest');
 const {EVConnectors, EVChargeStation} = require('../database/data.js');
-const {app, seturi} = require('../server.js');
-const {connect, dropDB, closeConnectionDB} = require('../connection.js');
+const {app, startingStartServer} = require('../server.js');
+const {dropDB, closeConnectionDB} = require('../connection.js');
 describe('Find Connectors of specified Type', () => {
   before(async () => {
     delete process.env.uri;
-    const uriInFindConnectors = await seturi();
-    await connect(uriInFindConnectors);
+    await startingStartServer();
   });
 
   it('should return connectors of the specified type and status 200 if successful', async () => {
@@ -117,6 +116,11 @@ describe('Find Connectors of specified Type', () => {
         .expect(200);
     expect(response.body).to.be.an('array');
   });
+  after(function(done) {
+    this.timeout(30000); // Increase timeout to 10 seconds
+    closeConnectionDB()
+        .then(() => done());
+  });
   /* it('should return connectors of the specified type near the given coordinates', async () => {
     // Mock charge station data
     const chargeStationData = {
@@ -144,7 +148,4 @@ describe('Find Connectors of specified Type', () => {
     expect(response.body.length).to.be.at.least(1);
     expect(response.body[0].connectorType).to.equal('Type A');
   });*/
-  after(async () => {
-    await closeConnectionDB();
-  });
 });
