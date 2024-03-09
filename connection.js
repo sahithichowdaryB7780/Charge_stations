@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const {MongoMemoryServer} = require('mongodb-memory-server');
 async function connect(uri) {
   try {
-    await mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
+    await mongoose.connect(uri);
     console.log(`connected to ${uri}`);
   } catch (error) {
     console.log('Error connecting to Db');
