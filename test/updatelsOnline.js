@@ -1,5 +1,4 @@
 const {expect} = require('chai');
-<<<<<<< HEAD
 const request = require('supertest');
 const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 const {app, seturi} = require('../server.js');
