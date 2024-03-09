@@ -10,8 +10,8 @@ const {describe, it} = require('mocha');
 describe('Use nock to mimic API requests', () => {
     before(async () => {
         delete process.env.uri;
-        const uri = await seturi();
-        await connect(uri);
+        const uriInEstimateChargingTime = await seturi();
+        await connect(uriInEstimateChargingTime);
     });
   it('should return connector data with estimated charging time', async () => {
     nock('http://localhost:8080')
