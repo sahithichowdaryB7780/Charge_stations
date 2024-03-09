@@ -1,7 +1,6 @@
 /* eslint-disable indent */
 const {expect} = require('chai');
 const request = require('supertest');
-const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 const {app, seturi} = require('../server.js');
 const {EVConnectors} = require('../database/data.js'); // Import EVConnectors model
 const nock = require('nock');
