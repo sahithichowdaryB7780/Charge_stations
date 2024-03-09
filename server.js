@@ -70,6 +70,33 @@ app.get('/connectors/existing/:connectorType', async (req, res, next) => {
   }
 });
 
+app.get('/connectors/:type/close-to/:latitude/:longitude', async (req, res) => {
+  const {type, latitude, longitude} = req.params;
+
+  const chargeStations = await EVChargeStation.find({
+    location: {
+      $near: {
+        $geometry: {
+          type: 'Point',
+          coordinates: [parseFloat(longitude), parseFloat(latitude)],
+        },
+      },
+    },
+  });
+
+  // Extract charge station IDs
+  const chargeStationIds = chargeStations.map((station) => station._id);
+
+  // Query for connectors of the specified type and associated with the found charge stations
+  const connectors = await EVConnectors.find({
+    'connectorType': type,
+    'chargePoint.chargeStation': {$in: chargeStationIds},
+  });
+
+  res.status(200).json(connectors);
+});
+
+
 app.put('/connectors/:connectorId', async (req, res) => {
   const {connectorId} = req.params;
   const {isOnline} = req.body;

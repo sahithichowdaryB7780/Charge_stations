@@ -19,8 +19,7 @@ describe('Post to Connectors and Stations', () => {
     const stationData = {
       chargeStationName: 'IndiEV',
       address: '11th cross, Kumarswamy Layout, Bangalore',
-      latitude: 12.34,
-      longitude: 56.78,
+      coordinates: [77.5946, 12.9716],
       amenities: ['restaurant', 'toilet'],
     };
     // Send POST request to /chargeStationsPost endpoint with stationData
@@ -58,8 +57,7 @@ describe('Post to Connectors and Stations', () => {
     const stationData = {
       chargeStationName: 'RelEV',
       address: '11th cross, ISRO Layout, Bangalore',
-      latitude: 10.34,
-      longitude: 54.78,
+      coordinates: [74.5946, 12.9716],
       amenities: ['restaurant', 'toilet'],
     };
 

@@ -29,9 +29,9 @@ describe('Update isOnline Field in Connectors', () => {
     expect(response.body.message).to.equal('Charge point updated successfully');
     expect(response.body.connector.isOnline).to.equal(false);
   });
-    after(async () => {
-        await closeConnectionDB();
-    });
+  after(async () => {
+    await closeConnectionDB();
+  });
   it('should return a 400 error if  connector does not exist', async () => {
     // Send a DELETE request with an invalid station ID
     const invalidConnectorIdInUpdateOnline = '609e11d67b4f3335940f3b9c';

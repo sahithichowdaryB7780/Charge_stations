@@ -17,8 +17,7 @@ describe('Delete Stations', () => {
     const newStation = await EVChargeStation.create({
       chargeStationName: 'Test Station',
       address: '123 Test Street',
-      latitude: 123.456,
-      longitude: 456.789,
+      coordinates: [-73.9857, 40.7484],
       amenities: ['wifi', 'coffee'],
     });
 

@@ -9,13 +9,9 @@ const evChargeStationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  latitude: {
-    type: Number,
-    required: true,
-  },
-  longitude: {
-    type: Number,
-    required: true,
+  coordinates: {
+    type: [Number],
+    index: '2dsphere',
   },
   amenities: [String],
 });
