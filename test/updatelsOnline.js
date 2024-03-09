@@ -34,16 +34,16 @@ describe('Update isOnline Field in Connectors', () => {
   });
   it('should return a 400 error if  connector does not exist', async () => {
     // Send a DELETE request with an invalid station ID
-    const invalidConnectorId = '609e11d67b4f3335940f3b9c';
+    const invalidConnectorIdInUpdateOnline = '609e11d67b4f3335940f3b9c';
     const response = await request(app)
-        .put(`/connectors/${invalidConnectorId}`)
+        .put(`/connectors/${invalidConnectorIdInUpdateOnline}`)
         .expect(400);
     expect(response.body.message).to.equal('Connector not found');
   });
-  afterEach(async () => {
-    await dropDB();
-  });
   after(async () => {
     await closeConnectionDB();
+  });
+  afterEach(async () => {
+    await dropDB();
   });
 });

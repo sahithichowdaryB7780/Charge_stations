@@ -9,6 +9,9 @@ describe('Delete Stations', () => {
     const uri = await seturi();
     await connect(uri);
   });
+  after(async () => {
+    await closeConnectionDB();
+  });
   it('should delete the station and return a success message', async () => {
     // Create a new station to delete
     const newStation = await EVChargeStation.create({
@@ -41,8 +44,5 @@ describe('Delete Stations', () => {
   });
   afterEach(async () => {
     await dropDB();
-  });
-  after(async () => {
-    await closeConnectionDB();
   });
 });
