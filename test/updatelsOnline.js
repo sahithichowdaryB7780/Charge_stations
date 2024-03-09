@@ -11,7 +11,6 @@ describe('Update isOnline Field in Connectors', () => {
     delete process.env.uri;
     const uri = await seturi();
     await connect(uri);
-=======
 const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 const {app, seturi} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
@@ -21,7 +20,6 @@ describe('Update isOnline Field in Connectors', () => {
     delete process.env.uri;
     const uriInUpdateOnline = await seturi();
     await connect(uriInUpdateOnline);
->>>>>>> dd6346fed69cd31679e9e0770d0ccd21e574784a
   });
 
 
@@ -52,18 +50,15 @@ describe('Update isOnline Field in Connectors', () => {
         .expect(400);
     expect(response.body.message).to.equal('Connector not found');
   });
-<<<<<<< HEAD
   after(async () => {
     await closeConnectionDB();
   });
   afterEach(async () => {
     await dropDB();
-=======
   afterEach(async () => {
     await dropDB();
   });
   after(async () => {
     await closeConnectionDB();
->>>>>>> dd6346fed69cd31679e9e0770d0ccd21e574784a
   });
 });
