@@ -1,20 +1,24 @@
 /* eslint-disable indent */
 const {expect} = require('chai');
 const request = require('supertest');
-const {app, seturi} = require('../server.js');
+const {app, startingStartServer} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
 const nock = require('nock');
 const {describe, it} = require('mocha');
-const {connect, dropDB, closeConnectionDB} = require('../connection.js');
+const {dropDB, closeConnectionDB} = require('../connection.js');
 
 describe('Use nock to mimic API requests', () => {
     before(async () => {
         delete process.env.uri;
-        const uriInEstimateChargingTime = await seturi();
-        await connect(uriInEstimateChargingTime);
+        await startingStartServer();
     });
     afterEach(async () => {
         await dropDB();
+    });
+    after(function(done) {
+        this.timeout(30000); // Increase timeout to 10 seconds
+        closeConnectionDB()
+            .then(() => done());
     });
   it('should return connector data with estimated charging time', async () => {
     nock('http://localhost:8080')
@@ -37,7 +41,4 @@ describe('Use nock to mimic API requests', () => {
       expect(connectorResultReturnedOnEstiChargeTime.body.isOnline).to.equal(true);
       expect(connectorResultReturnedOnEstiChargeTime.body.manufacturer).to.equal('Manufacturer -D');
   });
-    after(async () => {
-        await closeConnectionDB();
-    });
 });
