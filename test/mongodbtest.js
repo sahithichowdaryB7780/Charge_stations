@@ -1,9 +1,8 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
-const {connect} = require('../connection.js');
+const {connect, getURL} = require('../connection.js');
 const {mongoose} = require('mongoose');
-const {seturi} = require('../server.js');
 chai.use(chaiAsPromised);
 
 describe('connect function', () => {
@@ -18,9 +17,7 @@ describe('connect function', () => {
   });
 
   afterEach(() => {
-    // Restore console.log to its original behavior
     logSpy.restore();
-    // Restore mongoose.connect
     mongooseConnectStub.restore();
   });
 
@@ -29,11 +26,7 @@ describe('connect function', () => {
 
     // Stub mongoose.connect to resolve successfully
     mongooseConnectStub.resolves();
-
-    // Call connect function
     await connect(uri);
-
-    // Assert that console.log was called with the expected message
     sinon.assert.calledWithExactly(logSpy, `connected to ${uri}`);
   });
 
@@ -43,16 +36,12 @@ describe('connect function', () => {
 
     // Stub mongoose.connect to reject with an error
     mongooseConnectStub.rejects(errorMock);
-
-    // Call connect function with invalid URI and expect it to be rejected
     await connect(uri);
-
-    // Assert that console.log was called with the error message
     sinon.assert.calledWithExactly(logSpy, 'Error connecting to Db');
   });
   it('should log "connected to Mongodb memory server" message when connecting successfully', async () => {
     delete process.env.uri;
-    const uri = await seturi();
+    const uri = await getURL();
     mongooseConnectStub.resolves();
 
     await connect(uri);
@@ -77,30 +66,25 @@ describe('connect function', () => {
   });
 
   afterEach(() => {
-    // Restore console.log to its original behavior
+
     logSpy.restore();
   });
 
   it('should log "connected to ..." message and start server', async () => {
     const uri = 'mongodb://localhost:27017/test'; // Mock URI for testing
     const PORT = 3005;
-    // Call connect function
     await expect(connect(uri)).to.eventually.be.fulfilled;
 
-    // Assert that console.log was called with the expected message
     sinon.assert.calledWithExactly(logSpy, `connected to ${uri}`);
 
-    // Assert that app.listen was called with the correct port
     sinon.assert.calledWithExactly(logSpy, `Server is running on port ${PORT}`);
   });
 
   it('should log an error message when failing to connect', async () => {
     const uri = 'gt'; // Invalid URI to simulate connection failure
 
-    // Call connect function with invalid URI and expect it to be rejected
     await expect(connect(uri)).to.eventually.be.rejected;
 
-    // Assert that console.log was called with the error message
     sinon.assert.calledWithExactly(logSpy, 'Error connecting to DB');
   });
 });*/
