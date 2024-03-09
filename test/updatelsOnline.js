@@ -6,8 +6,8 @@ const request = require('supertest');
 describe('Update isOnline Field in Connectors', () => {
   before(async () => {
     delete process.env.uri;
-    const uri = await seturi();
-    await connect(uri);
+    const uriInUpdateOnline = await seturi();
+    await connect(uriInUpdateOnline);
   });
 
 
