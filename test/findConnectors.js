@@ -6,13 +6,10 @@ const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 describe('Find Connectors of specified Type', () => {
   before(async () => {
     delete process.env.uri;
-<<<<<<< HEAD
     const uri = await seturi();
     await connect(uri);
-=======
     const uriInFindConnectors = await seturi();
     await connect(uriInFindConnectors);
->>>>>>> dd6346fed69cd31679e9e0770d0ccd21e574784a
   });
 
   it('should return connectors of the specified type and status 200 if successful', async () => {
@@ -59,12 +56,9 @@ describe('Find Connectors of specified Type', () => {
     expect(Getresponse.body).to.be.an('array');
     expect(Getresponse.body).to.have.lengthOf(1);
   });
-<<<<<<< HEAD
   afterEach(async () => {
     await dropDB();
   });
-=======
->>>>>>> dd6346fed69cd31679e9e0770d0ccd21e574784a
   it('should return status 400 and an error message if no connectors are found for the specified type', async () => {
     // Specify a connector type for which no connectors exist
     const nonExistentConnectorType = 'Type-Y';
@@ -76,13 +70,10 @@ describe('Find Connectors of specified Type', () => {
     expect(response.body).to.be.an('object');
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
   });
-<<<<<<< HEAD
 
-=======
   afterEach(async () => {
     await dropDB();
   });
->>>>>>> dd6346fed69cd31679e9e0770d0ccd21e574784a
   after(async () => {
     await closeConnectionDB();
   });
