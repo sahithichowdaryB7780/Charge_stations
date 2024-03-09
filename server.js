@@ -4,13 +4,14 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const axios = require('axios');
+require('dotenv').config();
 app.use(bodyParser.json());
 const {getURL, connect} = require('./connection.js');
-require('dotenv').config();
 const PORT = 3005;
 app.use(bodyParser.json());
+// Function to set URI
 async function seturi() {
-  const uri = process.env.uri || getURL();
+  const uri = process.env.uri|| getURL();
   return uri;
 }
 const uri=seturi();
@@ -21,6 +22,7 @@ connect(uri)
       });
     });
 
+// Create Charge-Stations
 app.post('/chargeStations', async (req, res, next) => {
   try {
     const chargeStationProduct = await EVChargeStation.create(req.body);
@@ -30,7 +32,7 @@ app.post('/chargeStations', async (req, res, next) => {
   }
 });
 
-
+// Create Connectors
 app.post('/connectors', async (req, res, next) => {
   try {
     const connectorProduct = await EVConnectors.create(req.body);
@@ -40,7 +42,7 @@ app.post('/connectors', async (req, res, next) => {
   }
 });
 
-
+// Given Connector-Id must return estimation charging time
 app.get('/connectors/:connectorId', async (req, res) => {
   const {soc, batteryCapacity} = req.body;
   const connectorId = req.params.connectorId;
@@ -59,6 +61,7 @@ app.get('/connectors/:connectorId', async (req, res) => {
   res.status(200).json(responseData);
 });
 
+// It returns Connectors of specified Type
 app.get('/connectors/existing/:connectorType', async (req, res, next) => {
   const connectorType = req.params.connectorType;
   const connectors = await EVConnectors.find({connectorType});
@@ -70,8 +73,9 @@ app.get('/connectors/existing/:connectorType', async (req, res, next) => {
   }
 });
 
-app.get('/connectors/:type/close-to/:latitude/:longitude', async (req, res) => {
-  const {type, latitude, longitude} = req.params;
+// It returns all stations near by containing specified Type Connectors
+app.get('/connectors/:type/:longitude/:latitude', async (req, res) => {
+  const {type, longitude, latitude} = req.params;
 
   const chargeStations = await EVChargeStation.find({
     location: {
@@ -80,23 +84,21 @@ app.get('/connectors/:type/close-to/:latitude/:longitude', async (req, res) => {
           type: 'Point',
           coordinates: [parseFloat(longitude), parseFloat(latitude)],
         },
+        $maxDistance: 50000,
       },
     },
   });
 
-  // Extract charge station IDs
-  const chargeStationIds = chargeStations.map((station) => station._id);
-
   // Query for connectors of the specified type and associated with the found charge stations
   const connectors = await EVConnectors.find({
     'connectorType': type,
-    'chargePoint.chargeStation': {$in: chargeStationIds},
+    'chargePoint.chargeStation': {$in: chargeStations._id},
   });
 
   res.status(200).json(connectors);
 });
 
-
+// Update the isonline Field
 app.put('/connectors/:connectorId', async (req, res) => {
   const {connectorId} = req.params;
   const {isOnline} = req.body;
@@ -112,6 +114,7 @@ app.put('/connectors/:connectorId', async (req, res) => {
   return res.status(200).json({message: 'Charge point updated successfully', connector});
 });
 
+// Delete the Station
 app.delete('/stations/:stationId', async (req, res) => {
   const {stationId} = req.params;
   const deletedStation = await EVChargeStation.findByIdAndDelete(stationId);

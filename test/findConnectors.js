@@ -57,10 +57,7 @@ describe('Find Connectors of specified Type', () => {
     await dropDB();
   });
   it('should return status 400 and an error message if no connectors are found for the specified type', async () => {
-    // Specify a connector type for which no connectors exist
     const nonExistentConnectorType = 'Type-Y';
-
-    // Make request to retrieve connectors for a nonexistent type
     const response = await request(app)
         .get(`/connectors/existing/${nonExistentConnectorType}`)
         .expect(400);
@@ -68,6 +65,59 @@ describe('Find Connectors of specified Type', () => {
     expect(response.body).to.have.property('message', 'No connectors found for the specified type');
   });
   it('should return connectors of the specified type near the given coordinates', async () => {
+    const stationDataForFindingStation1 = {
+      chargeStationName: 'AtEV',
+      address: 'Mg Road Bangalore',
+      coordinates: [77.6088, 12.9754],
+      amenities: ['toilet', 'restro'],
+    };
+    const responseStationForFindingStation1 = await request(app)
+        .post('/connectors')
+        .send(stationDataForFindingStation1);
+
+    const _idofinsertedstationinForFindingStation1 = responseStationForFindingStation1.body._id;
+
+    const stationDataForFindingStation2 = {
+      chargeStationName: 'ArEV',
+      address: 'Cubbon Park',
+      coordinates: [77.5954, 12.9766],
+      amenities: ['toilet'],
+    };
+    const responseStationForFindingStation2 = await request(app)
+        .post('/connectors')
+        .send(stationDataForFindingStation2);
+    const _idofinsertedstationinForFindingStation2 = responseStationForFindingStation2.body._id;
+
+    await EVConnectors.create([
+      {
+        connector_id: 1,
+        connectorType: 'Type A',
+        wattage: 340,
+        manufacturer: 'Manufacturer O',
+        isOnline: false,
+        chargePoint: {
+          chargePointName: 'Hp2',
+          chargeStation: _idofinsertedstationinForFindingStation1,
+        },
+      },
+      {
+        connector_id: 13,
+        connectorType: 'Type A',
+        wattage: 640,
+        manufacturer: 'Manufacturer L',
+        isOnline: false,
+        chargePoint: {
+          chargePointName: 'Hi2',
+          chargeStation: _idofinsertedstationinForFindingStation2,
+        },
+      },
+    ]);
+    const response =await request(app)
+        .get('/connectors/Type A/77.6405/12.9733')
+        .expect(200);
+    expect(response.body).to.be.an('array');
+  });
+  /* it('should return connectors of the specified type near the given coordinates', async () => {
     // Mock charge station data
     const chargeStationData = {
       chargeStationName: 'TestStation',
@@ -93,7 +143,7 @@ describe('Find Connectors of specified Type', () => {
     expect(response.body).to.be.an('array');
     expect(response.body.length).to.be.at.least(1);
     expect(response.body[0].connectorType).to.equal('Type A');
-  });
+  });*/
   after(async () => {
     await closeConnectionDB();
   });

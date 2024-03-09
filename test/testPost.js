@@ -10,11 +10,6 @@ describe('Post to Connectors and Stations', () => {
     const uriInTestPost = await seturi();
     await connect(uriInTestPost);
   });
-
-
-  // Stop MongoDB Memory Server after running tests
-
-
   it('should create a new station', async () => {
     const stationData = {
       chargeStationName: 'IndiEV',
@@ -22,7 +17,6 @@ describe('Post to Connectors and Stations', () => {
       coordinates: [77.5946, 12.9716],
       amenities: ['restaurant', 'toilet'],
     };
-    // Send POST request to /chargeStationsPost endpoint with stationData
     const response = await request(app)
         .post('/chargeStations')
         .send(stationData)
@@ -33,8 +27,6 @@ describe('Post to Connectors and Stations', () => {
     expect(response.body.longitude).to.equal(stationData.longitude);
     expect(response.body.amenities).to.deep.equal(stationData.amenities);
   });
-
-  // ----------------------------------------------------------//
 
   it('should return 400 and an error message when data passing is wrong', async () => {
     const stationData = {
@@ -50,9 +42,6 @@ describe('Post to Connectors and Stations', () => {
     expect(response.body).to.be.an('object').and.to.have.property('Stationmessage');
   });
 
-
-  // ----------------------------------------------------------//
-
   it('should create a new connector', async () => {
     const stationData = {
       chargeStationName: 'RelEV',
@@ -60,8 +49,6 @@ describe('Post to Connectors and Stations', () => {
       coordinates: [74.5946, 12.9716],
       amenities: ['restaurant', 'toilet'],
     };
-
-    // Send POST request to create a charge station
     const responseStation = await request(app)
         .post('/chargeStations')
         .send(stationData);
@@ -99,7 +86,6 @@ describe('Post to Connectors and Stations', () => {
     // You may also need to modify this check depending on how you handle the station ID
     expect(response.body.chargePoint[0].chargeStation[0]).to.equal(_idofinsertedstation);
   });
-  // ----------------------------------------------------------//
   it('should return 400 when posting to connector goes wrong', async () => {
     const connector = {
       // Missing required fields, which should cause a validation error
@@ -112,7 +98,6 @@ describe('Post to Connectors and Stations', () => {
         .expect(400);
     expect(response.body).to.be.an('object').and.to.have.property('Connectormessage');
   });
-  // ----------------------------------------------------------//
   afterEach(async () => {
     await dropDB();
   });

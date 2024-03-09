@@ -2,7 +2,7 @@
 const {expect} = require('chai');
 const request = require('supertest');
 const {app, seturi} = require('../server.js');
-const {EVConnectors} = require('../database/data.js'); // Import EVConnectors model
+const {EVConnectors} = require('../database/data.js');
 const nock = require('nock');
 const {describe, it} = require('mocha');
 const {connect, dropDB, closeConnectionDB} = require('../connection.js');

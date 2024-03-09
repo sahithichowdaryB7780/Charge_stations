@@ -11,7 +11,6 @@ describe('Update isOnline Field in Connectors', () => {
     await connect(uriInUpdateOnline);
   });
   it('should update the isOnline field when the connector exists', async () => {
-    // Create a new connector with an initial isOnline value of true
     const createdConnector = await EVConnectors.create({
       connector_id: 1,
       connectorType: 'Type A',
@@ -21,9 +20,8 @@ describe('Update isOnline Field in Connectors', () => {
       chargePoint: [],
     });
 
-    // Send a PUT request to update the isOnline field
     const response = await request(app)
-        .put(`/connectors/${createdConnector._id}`) // Use the created connector's ID
+        .put(`/connectors/${createdConnector._id}`)
         .send({isOnline: false})
         .expect(200);
     expect(response.body.message).to.equal('Charge point updated successfully');
@@ -33,7 +31,6 @@ describe('Update isOnline Field in Connectors', () => {
     await closeConnectionDB();
   });
   it('should return a 400 error if  connector does not exist', async () => {
-    // Send a DELETE request with an invalid station ID
     const invalidConnectorIdInUpdateOnline = '609e11d67b4f3335940f3b9c';
     const response = await request(app)
         .put(`/connectors/${invalidConnectorIdInUpdateOnline}`)
