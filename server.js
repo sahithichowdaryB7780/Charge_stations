@@ -7,20 +7,44 @@ const axios = require('axios');
 require('dotenv').config();
 app.use(bodyParser.json());
 const {getURL, connect} = require('./connection.js');
-const PORT = 3005;
+let PORT = 3005;
 app.use(bodyParser.json());
 // Function to set URI
-async function seturi() {
-  const uri = process.env.uri|| getURL();
-  return uri;
-}
-const uri=seturi();
-connect(uri)
-    .then(() => {
+async function startServer() {
+  const uri = await seturi();
+  await connect(uri);
+  const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+  server.on('error', async (error) => {
+    if (error.code === 'EADDRINUSE') {
+      PORT++;
       app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
       });
-    });
+    }
+  });
+}
+
+async function seturi() {
+  const uri = process.env.uri || getURL();
+  return uri;
+}
+
+async function startingStartServer() {
+  await startServer();
+}
+/* const uri = await seturi();
+    connect(uri)
+        .then(() => {
+          app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+          });
+        });
+    async function seturi() {
+        const uri = process.env.uri || getURL();
+        return uri;*/
+
 
 // Create Charge-Stations
 app.post('/chargeStations', async (req, res, next) => {
@@ -124,6 +148,6 @@ app.delete('/stations/:stationId', async (req, res) => {
   return res.status(200).json({message: 'Station deleted successfully', deletedStation});
 });
 module.exports = {
-  seturi,
   app,
+  startingStartServer,
 };
