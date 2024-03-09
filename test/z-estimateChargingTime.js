@@ -1,6 +1,7 @@
 /* eslint-disable indent */
 const {expect} = require('chai');
 const request = require('supertest');
+const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 const {app, seturi} = require('../server.js');
 const {EVConnectors} = require('../database/data.js'); // Import EVConnectors model
 const nock = require('nock');
@@ -12,6 +13,8 @@ describe('Use nock to mimic API requests', () => {
         delete process.env.uri;
         const uri = await seturi();
         await connect(uri);
+        const uriInEstimateChargingTime = await seturi();
+        await connect(uriInEstimateChargingTime);
     });
   it('should return connector data with estimated charging time', async () => {
     nock('http://localhost:8080')

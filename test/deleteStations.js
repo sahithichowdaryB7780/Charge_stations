@@ -45,4 +45,7 @@ describe('Delete Stations', () => {
   afterEach(async () => {
     await dropDB();
   });
+  after(async () => {
+    await closeConnectionDB();
+  });
 });
