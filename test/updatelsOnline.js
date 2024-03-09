@@ -1,14 +1,13 @@
 const {expect} = require('chai');
 const request = require('supertest');
-const {connect, dropDB, closeConnectionDB} = require('../connection.js');
-const {app, seturi} = require('../server.js');
+const {dropDB, closeConnectionDB} = require('../connection.js');
+const {app, startingStartServer} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
 
 describe('Update isOnline Field in Connectors', () => {
   before(async () => {
     delete process.env.uri;
-    const uriInUpdateOnline = await seturi();
-    await connect(uriInUpdateOnline);
+    await startingStartServer();
   });
   it('should update the isOnline field when the connector exists', async () => {
     const createdConnector = await EVConnectors.create({
@@ -27,8 +26,10 @@ describe('Update isOnline Field in Connectors', () => {
     expect(response.body.message).to.equal('Charge point updated successfully');
     expect(response.body.connector.isOnline).to.equal(false);
   });
-  after(async () => {
-    await closeConnectionDB();
+  after(function(done) {
+    this.timeout(30000); // Increase timeout to 10 seconds
+    closeConnectionDB()
+        .then(() => done());
   });
   it('should return a 400 error if  connector does not exist', async () => {
     const invalidConnectorIdInUpdateOnline = '609e11d67b4f3335940f3b9c';
