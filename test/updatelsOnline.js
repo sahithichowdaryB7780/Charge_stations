@@ -54,10 +54,5 @@ describe('Update isOnline Field in Connectors', () => {
   });
   afterEach(async () => {
     await dropDB();
-  afterEach(async () => {
-    await dropDB();
-  });
-  after(async () => {
-    await closeConnectionDB();
   });
 });
