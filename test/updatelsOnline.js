@@ -4,24 +4,12 @@ const {connect, dropDB, closeConnectionDB} = require('../connection.js');
 const {app, seturi} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
 
-
-describe('Update isOnline Field in Connectors', () => {
-  before(async () => {
-    delete process.env.uri;
-    const uri = await seturi();
-    await connect(uri);
-const {connect, dropDB, closeConnectionDB} = require('../connection.js');
-const {app, seturi} = require('../server.js');
-const {EVConnectors} = require('../database/data.js');
-const request = require('supertest');
 describe('Update isOnline Field in Connectors', () => {
   before(async () => {
     delete process.env.uri;
     const uriInUpdateOnline = await seturi();
     await connect(uriInUpdateOnline);
   });
-
-
   it('should update the isOnline field when the connector exists', async () => {
     // Create a new connector with an initial isOnline value of true
     const createdConnector = await EVConnectors.create({
