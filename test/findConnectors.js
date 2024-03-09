@@ -56,9 +56,6 @@ describe('Find Connectors of specified Type', () => {
   afterEach(async () => {
     await dropDB();
   });
-  afterEach(async () => {
-    await dropDB();
-  });
   it('should return status 400 and an error message if no connectors are found for the specified type', async () => {
     // Specify a connector type for which no connectors exist
     const nonExistentConnectorType = 'Type-Y';
@@ -81,11 +78,11 @@ describe('Find Connectors of specified Type', () => {
     const connectorData = {
       connector_id: 1,
       connectorType: 'Type A',
-      wattage: 240,
-      manufacturer: 'Manufacturer X',
-      isOnline: true,
+      wattage: 270,
+      manufacturer: 'Manufacturer P',
+      isOnline: false,
       chargePoint: {
-        chargePointName: 'TestPoint',
+        chargePointName: 'TestPoint1',
         chargeStation: mockChargeStation._id,
       },
     };
