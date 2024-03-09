@@ -1,16 +1,12 @@
-const {connect, dropDB, closeConnectionDB} = require('../connection.js');
-const {app, seturi} = require('../server.js');
+const {dropDB, closeConnectionDB} = require('../connection.js');
+const {app, startingStartServer} = require('../server.js');
 const {expect} = require('chai');
 const request = require('supertest');
 const {EVChargeStation} = require('../database/data.js');
 describe('Delete Stations', () => {
   before(async () => {
     delete process.env.uri;
-    const uriInDeleteStation = await seturi();
-    await connect(uriInDeleteStation);
-  });
-  after(async () => {
-    await closeConnectionDB();
+    await startingStartServer();
   });
   it('should delete the station and return a success message', async () => {
     const newStation = await EVChargeStation.create({
@@ -27,6 +23,11 @@ describe('Delete Stations', () => {
     expect(response.body.deletedStation._id).to.equal(newStation._id.toString());
     const deletedStation = await EVChargeStation.findById(newStation._id);
     expect(deletedStation).to.be.null;
+  });
+  after(function(done) {
+    this.timeout(30000); // Increase timeout to 10 seconds
+    closeConnectionDB()
+        .then(() => done());
   });
   it('should return a 400 error if the station does not exist', async () => {
     // Send a DELETE request with an invalid station ID
