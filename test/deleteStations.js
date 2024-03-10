@@ -1,7 +1,8 @@
-const {dropDB, closeConnectionDB} = require('../connection.js');
+const {dropDB} = require('../connection.js');
 const {app, startingStartServer} = require('../server.js');
 const {expect} = require('chai');
 const request = require('supertest');
+const cleanup = require('./after.js');
 const {EVChargeStation} = require('../database/data.js');
 describe('Delete Stations', () => {
   before(async () => {
@@ -24,11 +25,7 @@ describe('Delete Stations', () => {
     const deletedStation = await EVChargeStation.findById(newStation._id);
     expect(deletedStation).to.be.null;
   });
-  after(function(done) {
-    this.timeout(30000); // Increase timeout to 10 seconds
-    closeConnectionDB()
-        .then(() => done());
-  });
+  after(cleanup);
   it('should return a 400 error if the station does not exist', async () => {
     // Send a DELETE request with an invalid station ID
     const invalidStationId = '609e11d67b4f3335940f3b9c';

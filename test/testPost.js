@@ -1,7 +1,8 @@
 const request = require('supertest');
 const {expect} = require('chai');
+const cleanup = require('./after.js');
 const {app, startingStartServer} = require('../server.js');
-const {dropDB, closeConnectionDB} = require('../connection.js');
+const {dropDB} = require('../connection.js');
 describe('Post to Connectors and Stations', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   before(async () => {
@@ -84,11 +85,7 @@ describe('Post to Connectors and Stations', () => {
     // You may also need to modify this check depending on how you handle the station ID
     expect(response.body.chargePoint[0].chargeStation[0]).to.equal(_idofinsertedstation);
   });
-  after(function(done) {
-    this.timeout(30000); // Increase timeout to 10 seconds
-    closeConnectionDB()
-        .then(() => done());
-  });
+  after(cleanup);
   it('should return 400 when posting to connector goes wrong', async () => {
     const connector = {
       // Missing required fields, which should cause a validation error

@@ -5,7 +5,8 @@ const {app, startingStartServer} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
 const nock = require('nock');
 const {describe, it} = require('mocha');
-const {dropDB, closeConnectionDB} = require('../connection.js');
+const cleanup = require('./after.js');
+const {dropDB} = require('../connection.js');
 
 describe('Use nock to mimic API requests', () => {
     before(async () => {
@@ -15,11 +16,7 @@ describe('Use nock to mimic API requests', () => {
     afterEach(async () => {
         await dropDB();
     });
-    after(function(done) {
-        this.timeout(30000); // Increase timeout to 10 seconds
-        closeConnectionDB()
-            .then(() => done());
-    });
+    after(cleanup);
   it('should return connector data with estimated charging time', async () => {
     nock('http://localhost:8080')
         .post('/estimate-charging-time')
