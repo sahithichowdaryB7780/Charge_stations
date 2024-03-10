@@ -1,7 +1,8 @@
 /* eslint-disable indent */
 const {expect} = require('chai');
+const beforeHook = require('../before');
 const request = require('supertest');
-const {app, startingStartServer} = require('../server.js');
+const {app} = require('../server.js');
 const {EVConnectors} = require('../database/data.js');
 const nock = require('nock');
 const {describe, it} = require('mocha');
@@ -10,8 +11,7 @@ const {dropDB} = require('../connection.js');
 
 describe('Use nock to mimic API requests', () => {
     before(async () => {
-        delete process.env.uri;
-        await startingStartServer();
+        await beforeHook();
     });
     afterEach(async () => {
         await dropDB();

@@ -1,13 +1,13 @@
 const {dropDB} = require('../connection.js');
-const {app, startingStartServer} = require('../server.js');
+const {app} = require('../server.js');
 const {expect} = require('chai');
 const request = require('supertest');
 const cleanup = require('./after.js');
 const {EVChargeStation} = require('../database/data.js');
+const beforeHook = require('../before');
 describe('Delete Stations', () => {
   before(async () => {
-    delete process.env.uri;
-    await startingStartServer();
+    await beforeHook();
   });
   it('should delete the station and return a success message', async () => {
     const newStation = await EVChargeStation.create({

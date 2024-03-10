@@ -1,13 +1,13 @@
 const request = require('supertest');
 const {expect} = require('chai');
 const cleanup = require('./after.js');
-const {app, startingStartServer} = require('../server.js');
+const {app} = require('../server.js');
+const beforeHook = require('../before');
 const {dropDB} = require('../connection.js');
 describe('Post to Connectors and Stations', () => {
   // Start MongoDB Memory Server and connect to it before running tests
   before(async () => {
-    delete process.env.uri;
-    await startingStartServer();
+    await beforeHook();
   });
   it('should create a new station', async () => {
     const stationData = {

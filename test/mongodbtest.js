@@ -22,12 +22,12 @@ describe('connect function', () => {
   });
 
   it('should log "connected to ..." message when connecting successfully', async () => {
-    const uri = 'mongodb://localhost:27017/test'; // Mock URI for testing
+    const uriMongoDb = 'mongodb://localhost:27017/test'; // Mock URI for testing
 
     // Stub mongoose.connect to resolve successfully
     mongooseConnectStub.resolves();
-    await connect(uri);
-    sinon.assert.calledWithExactly(logSpy, `connected to ${uri}`);
+    await connect(uriMongoDb);
+    sinon.assert.calledWithExactly(logSpy, `connected to ${uriMongoDb}`);
   });
 
   it('should log an error message when failing to connect', async () => {
@@ -41,12 +41,10 @@ describe('connect function', () => {
   });
   it('should log "connected to Mongodb memory server" message when connecting successfully', async () => {
     delete process.env.uri;
-    const uri = await getURL();
+    const uriMongoDbMemoryServer = await getURL();
     mongooseConnectStub.resolves();
-
-    await connect(uri);
-
-    sinon.assert.calledWithExactly(logSpy, `connected to ${uri}`);
+    await connect(uriMongoDbMemoryServer);
+    sinon.assert.calledWithExactly(logSpy, `connected to ${uriMongoDbMemoryServer}`);
   });
 });
 /* const {connect} = require('../connection.js');

@@ -1,14 +1,14 @@
 const {expect} = require('chai');
 const request = require('supertest');
 const {dropDB} = require('../connection.js');
-const {app, startingStartServer} = require('../server.js');
+const {app} = require('../server.js');
 const cleanup = require('./after.js');
+const beforeHook = require('../before');
 const {EVConnectors} = require('../database/data.js');
 
 describe('Update isOnline Field in Connectors', () => {
   before(async () => {
-    delete process.env.uri;
-    await startingStartServer();
+    await beforeHook();
   });
   it('should update the isOnline field when the connector exists', async () => {
     const createdConnector = await EVConnectors.create({

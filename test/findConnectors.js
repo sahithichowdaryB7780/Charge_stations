@@ -1,13 +1,13 @@
 const {expect} = require('chai');
 const request = require('supertest');
 const {EVConnectors, EVChargeStation} = require('../database/data.js');
-const {app, startingStartServer} = require('../server.js');
+const {app} = require('../server.js');
+const beforeHook = require('../before');
 const cleanup = require('./after.js');
 const {dropDB} = require('../connection.js');
 describe('Find Connectors of specified Type', () => {
   before(async () => {
-    delete process.env.uri;
-    await startingStartServer();
+    await beforeHook();
   });
 
   it('should return connectors of the specified type and status 200 if successful', async () => {
