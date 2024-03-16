@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
+    "\\database",
     "\\test"
   ],
-  "SelectedNode": "\\.env",
+  "SelectedNode": "\\test\\portTest.js",
   "PreviewInSolutionExplorer": false
 }
