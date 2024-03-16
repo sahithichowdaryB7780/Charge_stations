@@ -1,5 +1,5 @@
 // beforeHook.js
-const {startingStartServer} = require('./server');
+const {startingStartServer} = require('./index');
 
 async function beforeHook() {
   delete process.env.uri;

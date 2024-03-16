@@ -29,13 +29,14 @@ async function startServer() {
 }
 
 async function seturi() {
-  const uri = process.env.uri || getURL();
+  const uri = process.env.uri || await getURL();
   return uri;
 }
 
 async function startingStartServer() {
   await startServer();
 }
+
 /* const uri = await seturi();
     connect(uri)
         .then(() => {
