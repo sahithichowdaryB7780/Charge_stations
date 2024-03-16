@@ -9,6 +9,7 @@ describe('Delete Stations', () => {
   before(async () => {
     await beforeHook();
   });
+
   it('should delete the station and return a success message', async () => {
     const newStation = await EVChargeStation.create({
       chargeStationName: 'Test Station',
