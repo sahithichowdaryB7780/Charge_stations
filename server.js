@@ -46,6 +46,8 @@ async function startingStartServer() {
         return uri;*/
 
 
+startingStartServer();
+
 // Create Charge-Stations
 app.post('/chargeStations', async (req, res, next) => {
   try {
@@ -67,20 +69,23 @@ app.post('/connectors', async (req, res, next) => {
 });
 
 // Given Connector-Id must return estimation charging time
-app.get('/connectors/:connectorId', async (req, res) => {
-  const {soc, batteryCapacity} = req.body;
+app.get('/connectors/chargingTime/:connectorId', async (req, res) => {
   const connectorId = req.params.connectorId;
-  const connectorData = await EVConnectors.findOne({_id: connectorId});
-  const estimationResponse = await axios.post('http://localhost:8080/estimate-charging-time', {
-    batteryCapacity: parseFloat(batteryCapacity),
-    stateOfCharge: parseFloat(soc),
-    power: connectorData.wattage,
+  const connectorData = await EVConnectors.findById(connectorId);
+  const {soc, battCapacity} = req.body;
+  const estimationResponse = await axios.get('http://localhost:3000/estimate-charging-time', {
+    params: {
+      soc: soc,
+      battcapacity: battCapacity,
+      power: connectorData.wattage,
+    },
   });
+  const chargingTime = estimationResponse.data.estimationChargingTime;
   const responseData = {
     connectorType: connectorData.connectorType,
     isOnline: connectorData.isOnline,
     manufacturer: connectorData.manufacturer,
-    estimateChargingTime: estimationResponse.data.estimateChargingTime,
+    estimateChargingTimeInHours: chargingTime,
   };
   res.status(200).json(responseData);
 });

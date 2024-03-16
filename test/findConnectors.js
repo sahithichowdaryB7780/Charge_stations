@@ -117,6 +117,7 @@ describe('Find Connectors of specified Type', () => {
         .expect(200);
     expect(response.body).to.be.an('array');
   });
+
   after(cleanup);
   /* it('should return connectors of the specified type near the given coordinates', async () => {
     // Mock charge station data

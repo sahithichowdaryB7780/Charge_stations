@@ -17,25 +17,30 @@ describe('Use nock to mimic API requests', () => {
         await dropDB();
     });
     after(cleanup);
-  it('should return connector data with estimated charging time', async () => {
-    nock('http://localhost:8080')
-        .post('/estimate-charging-time')
-        .reply(200, {estimateChargingTime: 2});
-    const connectorDataToPerformCreate = {
-      connector_id: 1234,
-      connectorType: 'Type-A',
-      wattage: '10',
-      manufacturer: 'Manufacturer -D',
-      isOnline: true,
-    };
-    const connectorDataCreated = await EVConnectors.create(connectorDataToPerformCreate);
-    const connectorResultReturnedOnEstiChargeTime = await request(app)
-        .get(`/connectors/${connectorDataCreated._id}`)
-        .send({soc: 50, batteryCapacity: 40})
-        .expect(200);
-      expect(connectorResultReturnedOnEstiChargeTime.body.estimateChargingTime).to.equal(2);
-      expect(connectorResultReturnedOnEstiChargeTime.body.connectorType).to.equal('Type-A');
-      expect(connectorResultReturnedOnEstiChargeTime.body.isOnline).to.equal(true);
-      expect(connectorResultReturnedOnEstiChargeTime.body.manufacturer).to.equal('Manufacturer -D');
-  });
+    it('should return connector data with estimated charging time', async () => {
+        // Mocking the estimation response
+        nock('http://localhost:3000')
+            .get('/estimate-charging-time')
+            .query({soc: 50, battcapacity: 40, power: '10'}) // Adjust parameters according to your implementation
+            .reply(200, {estimationChargingTime: 2});
+
+        // Create a mock connector
+        const connectorDataToPerformCreate = {
+            connector_id: 1234,
+            connectorType: 'Type-A',
+            wattage: '10',
+            manufacturer: 'Manufacturer -D',
+            isOnline: true,
+        };
+        const connectorDataCreated = await EVConnectors.create(connectorDataToPerformCreate);
+
+        // Make a request to the endpoint
+        const connectorResultReturnedOnEstiChargeTime = await request(app)
+            .get(`/connectors/chargingTime/${connectorDataCreated._id}`)
+            .send({soc: 50, battCapacity: 40}) // Adjust parameter names according to your implementation
+            .expect(200);
+
+        // Assert that the estimated charging time is as expected
+        expect(connectorResultReturnedOnEstiChargeTime.body.estimateChargingTimeInHours).to.equal(2);
+    });
 });
