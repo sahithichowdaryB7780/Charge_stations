@@ -48,8 +48,6 @@ async function startingStartServer() {
         return uri;*/
 
 
-startingStartServer();
-
 // Create Charge-Stations
 app.post('/chargeStations', async (req, res, next) => {
   try {
@@ -157,4 +155,5 @@ app.delete('/stations/:stationId', async (req, res) => {
 module.exports = {
   app,
   startingStartServer,
+
 };
