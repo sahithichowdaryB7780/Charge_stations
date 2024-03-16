@@ -1,4 +1,4 @@
-const {dropDB} = require('../connection.js');
+const {dropDB, closeConnectionDB} = require('../connection.js');
 const {app} = require('../server.js');
 const {expect} = require('chai');
 const request = require('supertest');
@@ -7,6 +7,7 @@ const {EVChargeStation} = require('../database/data.js');
 const beforeHook = require('../before');
 describe('Delete Stations', () => {
   before(async () => {
+    await closeConnectionDB();
     await beforeHook();
   });
 
