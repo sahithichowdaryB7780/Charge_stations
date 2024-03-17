@@ -5,7 +5,7 @@ async function connect(uri) {
     await mongoose.connect(uri);
     console.log(`connected to ${uri}`);
   } catch (error) {
-    console.log('Error connecting to Db' ,error);
+    console.log('Error connecting to Db');
   }
 }
 let mongoServer;

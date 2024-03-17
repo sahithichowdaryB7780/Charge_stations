@@ -36,7 +36,6 @@ async function seturi() {
 async function startingStartServer() {
   await startServer();
 }
-
 startingStartServer();
 /* const uri = await seturi();
     connect(uri)
