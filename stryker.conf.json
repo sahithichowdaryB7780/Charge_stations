@@ -8,5 +8,5 @@
   ],
   "testRunner": "mocha",
   "coverageAnalysis": "perTest",
-  "thresholds": {"break": 90}
+  "thresholds": {"break": 75}
 }

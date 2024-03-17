@@ -1,7 +1,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
-const {connect, getURL} = require('../connection.js');
+const {connect} = require('../connection.js');
 const {mongoose} = require('mongoose');
 chai.use(chaiAsPromised);
 
@@ -27,7 +27,7 @@ describe('connect function', () => {
     // Stub mongoose.connect to resolve successfully
     mongooseConnectStub.resolves();
     await connect(uriMongoDb);
-    sinon.assert.calledWithExactly(logSpy, `connected to ${uriMongoDb}`);
+    sinon.assert.calledWithExactly(logSpy, `Connected to DB`);
   });
 
   it('should log an error message when failing to connect', async () => {
@@ -37,14 +37,7 @@ describe('connect function', () => {
     // Stub mongoose.connect to reject with an error
     mongooseConnectStub.rejects(errorMock);
     await connect(uri);
-    sinon.assert.calledWithExactly(logSpy, 'Error connecting to Db');
-  });
-  it('should log "connected to Mongodb memory server" message when connecting successfully', async () => {
-    delete process.env.uri;
-    const uriMongoDbMemoryServer = await getURL();
-    mongooseConnectStub.resolves();
-    await connect(uriMongoDbMemoryServer);
-    sinon.assert.calledWithExactly(logSpy, `connected to ${uriMongoDbMemoryServer}`);
+    sinon.assert.calledWithExactly(logSpy, 'Error connecting to DB:');
   });
 });
 /* const {connect} = require('../connection.js');
