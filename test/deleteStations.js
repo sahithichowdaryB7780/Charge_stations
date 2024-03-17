@@ -1,12 +1,14 @@
-const {dropDB} = require('../connection.js');
+const {dropDB, closeConnectionDB} = require('../connection.js');
 const {app} = require('../server.js');
 const {expect} = require('chai');
 const request = require('supertest');
 const cleanup = require('./after.js');
 const {EVChargeStation} = require('../database/data.js');
 const beforeHook = require('../before');
+const {startingStartServer} = require('../index.js');
 describe('Delete Stations', () => {
   before(async () => {
+    await Promise.all([startingStartServer(), closeConnectionDB()]);
     beforeHook();
   });
 
