@@ -7,9 +7,9 @@ const {EVChargeStation} = require('../database/data.js');
 const beforeHook = require('../before');
 describe('Delete Stations', () => {
   before(async () => {
-    await closeConnectionDB();
-    await beforeHook();
+    await closeConnectionDB().then(beforeHook);
   });
+
 
   it('should delete the station and return a success message', async () => {
     const newStation = await EVChargeStation.create({
